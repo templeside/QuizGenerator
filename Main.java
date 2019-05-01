@@ -1,5 +1,6 @@
 package application;
 
+import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -18,8 +19,13 @@ import javafx.scene.text.FontWeight;
 
 
 public class Main extends Application {
-	private int totalNumQuestions;
-	private int numIncorrect;
+    private QuestionDatabase questionDB;
+    private List<Question> questions;
+    private Question currQuestion;
+    private int currQuestionNum;
+    private int totalNumQuestions;
+    private int numIncorrect;
+
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -76,8 +82,8 @@ public class Main extends Application {
             rightVB.getChildren().addAll(hb);
 
             Label topicLabel = new Label("Topics:");
-            ComboBox<String> topicBox = new ComboBox<String>(FXCollections
-                .observableArrayList("Graphs", "Hash Tables", "Linux", "Trees"));
+            ComboBox<String> topicBox = new ComboBox<String>(
+                FXCollections.observableArrayList("Graphs", "Hash Tables", "Linux", "Trees"));
             rightVB.getChildren().addAll(topicLabel, topicBox);
 
             root.setRight(rightVB);
@@ -101,35 +107,53 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-    
+
+    private void displayAddQuestionForm() {
+
+    }
+
+    private void displayQuiz() {
+
+    }
+
+    private void displayQuestion() {
+
+    }
+
+    private void displaySubmit(QuestionNode qn) {
+
+    }
+
     private void displayResults() {
-    	Stage s = new Stage();
-    	s.setFullScreen(true);
-    	
-    	BorderPane root = new BorderPane();
-    	Scene scene = new Scene(root, 400, 400);
-    	VBox centerVB = new VBox();
+        Stage s = new Stage();
+        s.setFullScreen(true);
+
+        BorderPane root = new BorderPane();
+        Scene scene = new Scene(root, 400, 400);
+        VBox centerVB = new VBox();
         centerVB.setPadding(new Insets(10, 50, 50, 50));
         centerVB.setSpacing(10);
         s.setScene(scene);
         s.show();
-        
-        //correct label
-        Label correct = new Label("Number of Correct Answers: " + (this.totalNumQuestions - this.numIncorrect));
+
+        // correct label
+        Label correct =
+            new Label("Number of Correct Answers: " + (this.totalNumQuestions - this.numIncorrect));
         correct.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
-    	centerVB.getChildren().add(correct);
-    	//total question label
-    	Label totalQuestions = new Label("Number of Questions: " + this.totalNumQuestions);
+        centerVB.getChildren().add(correct);
+        // total question label
+        Label totalQuestions = new Label("Number of Questions: " + this.totalNumQuestions);
         totalQuestions.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
-    	centerVB.getChildren().add(totalQuestions);
-    	//percent label
-    	double percent = (this.totalNumQuestions - this.numIncorrect)/(double)(this.totalNumQuestions)*100;
-    	Label score = new Label("Score: " + percent + "%");
-    	score.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
-    	centerVB.getChildren().add(score);
-    	
-    	root.setCenter(centerVB);
-    	s.show();
+        centerVB.getChildren().add(totalQuestions);
+        // percent label
+        double percent =
+            (this.totalNumQuestions - this.numIncorrect) / (double) (this.totalNumQuestions) * 100;
+        Label score = new Label("Score: " + percent + "%");
+        score.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
+        centerVB.getChildren().add(score);
+
+        root.setCenter(centerVB);
+        s.show();
     }
 
     public static void main(String[] args) {

@@ -20,12 +20,16 @@ public class QuestionDatabase implements QuestionDatabaseADT {
         topics = null;
     }
 
-    public void addQuestion() {
-
+    public void addQuestion(String topic, Question q) {
+        topics.get(topic).add(q);
     }
 
     public int getNumQuestions() {
-        return 0;
+        int num = 0;
+    	for(int i = 0; i < topics.size(); i++) {
+        	num+= topics.get(i).size();
+        }
+    	return num;
     }
 
     public void saveQuestionsToJSON(File file) {
@@ -33,7 +37,7 @@ public class QuestionDatabase implements QuestionDatabaseADT {
     }
 
     public List<Question> getQuestions(String topic) {
-        return null;
+        return topics.get(topic);
 
     }
 

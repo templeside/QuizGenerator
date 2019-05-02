@@ -49,18 +49,52 @@ public class QuestionDatabase implements QuestionDatabaseADT {
         return count;
     }
 
-    public void saveQuestionsToJSON(File file) {
+    /**
+	 * This method saves all the questions from the "topics" (List of questions) into the json file 
+	 *@param file is the file that the questions are saved to.
+	 */
+	public void saveQuestionsToJSON(File file) {
 
-        
-    }
+		FileWriter f; // "topics" file
+		JSONObject obj = new JSONObject();
 
+		try { //CHECK THIS!!!!
+			f = new FileWriter(file);
+
+			//each topic = List
+			Iterator itr1 = ((List) f).iterator();
+
+			while(itr1.hasNext()) {
+				List q_List = (List) itr1.next();
+				JSONArray list = new JSONArray(); // list of questions
+
+				for(int i=0; i<q_List.size(); i++) { //add each question -> q_list
+					list.add(q_List.get(i));
+				}
+				obj.put(q_List, list); // each topic into obj
+			}
+			f.write(obj.toJSONString()); // write obj into a file
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+/**
+	 *This method returns a list of Questions given their topic.
+	 *@param topic is the topic of the Questions
+	 */
     public List<Question> getQuestions(String topic) {
         List<Question> questionList = new ArrayList<Question>();
         questionList = topics.get(topic);
         return questionList;
 
     }
-
+    
+/**
+	 *This method loads Questions from a JSON file.
+	 *@param file is the file that Questions are being loaded from
+	 */
     public void loadQuestionsFromJSON(File file) {
         Object obj;
 
@@ -108,7 +142,10 @@ public class QuestionDatabase implements QuestionDatabaseADT {
             e.printStackTrace();
         }
     }
-
+    
+/**
+	 *@return an ObservableList of the topics
+	 */
     public ObservableList<String> getTopics() {
         ObservableList<String> list = FXCollections.observableArrayList();
         list.addAll(topics.keySet());

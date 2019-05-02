@@ -373,18 +373,145 @@ public class Main extends Application {
 
     }
 
-    private void displayQuiz() {
+    
+    
+	private void displayQuiz() {
 
-    }
-
+		for(int i=0; i<totalNumQuestions; i++) { // doesn't the #of Questions has to be chosen by the user?
+			currQuestion = questions.get(i);
+			displayQuestion();
+		}
+	}
+    /**
+	 * Once settings have been made: 
+	 * User presses button to generate a quiz.
+	 * The application shows one question at a time and accepts the users answer for the question.
+	 * Some questions may have corresponding images, that will appear in a 200x200 window in your GUI.  
+	 * If a question has no image, this window will be blank, or show a background color or image.
+	 */
     private void displayQuestion() {
+		Stage s = new Stage();
+		BorderPane root = new BorderPane();
+		Scene scene = new Scene(root, 400, 400);
 
-    }
+		//not sure if we still need this
+		//		VBox centerVB = new VBox();
+		//		centerVB.setPadding(new Insets(10, 50, 50, 50));
+		//		centerVB.setSpacing(10);
+		
+		s.setScene(scene);
+		s.show();
 
+		// Question #/ Total Q#
+		// Check if this works
+		VBox box = new VBox();
+		box.setPadding(new Insets(10, 50, 50, 50));
+		box.setSpacing(10);
+		Label questionNumber = new Label("Current Question: " + this.currQuestionNum + "/  Total: " + totalNumQuestions);
+		QuestionNode q = new QuestionNode(this.currQuestion);
+		box.getChildren().add(questionNumber);
+		box.getChildren().add(q.getNode());
+
+		//Question(Label) : Displays the question text
+		TextFlow textFlow = new TextFlow();
+		textFlow.setLayoutX(40);
+		textFlow.setLayoutY(40);
+		Text text1 = new Text(currQuestion.getQuestion());
+		box.getChildren().add(text1);
+		root.setCenter(text1);
+
+		//Image 
+		// check if this works
+		Image image = new Image(currQuestion.getImage());
+		ImageView imageView = new ImageView(image);
+		imageView.setFitHeight(200); //200x200 pixel frame
+		imageView.setFitWidth(200);
+		root.setCenter(imageView);
+
+		//Choices(ToggleGroup)
+		//Radio buttons for choices
+		RadioButton[] buttons = new RadioButton[5]; // max 10 multiple choice?? no limit??
+		ToggleGroup group2 = new ToggleGroup();
+		
+		for( int i=0; i<currQuestion.getChoices().size(); i++) {
+			buttons[i] = new RadioButton(currQuestion.getChoices().get(i).choice);
+			buttons[i].setToggleGroup(group2);
+			box.getChildren().addAll(buttons[i]);
+		}
+	
+		Button submit = new Button();
+		submit.setText("Submit"); // IF SUBMIT THEN displaySubmit()
+		box.getChildren().add(submit);
+		root.setBottom(box);
+		
+		//Submit -> check answer
+		EventHandler<ActionEvent> isCorrect = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				displaySubmit(q);	//NEED a question node		
+			}
+		};
+		//if submit is pressed, run isCorrect
+		submit.setOnAction(isCorrect);
+	}
+
+
+    /**
+	 * After each question is answered:
+	 * The result is indicated to the user as "correct" or "incorrect" in some manner.
+	 * Do not use only color to indicate correctness.
+	 * @param qn
+	 */
     private void displaySubmit(QuestionNode qn) {
+		Stage s = new Stage();
 
-    }
+		//consider CORRECT/INCORRECT
+		if(qn.getChoices().equals(qn.getNode().getUserData())) { //TA
+			String family = "Helvetica";
+			double size = 50;
 
+			TextFlow textFlow = new TextFlow();
+			textFlow.setLayoutX(40);
+			textFlow.setLayoutY(40);
+			Text text1 = new Text("CORRECT!");
+			text1.setFont(Font.font(family, size));
+			text1.setFill(Color.GREEN);
+
+			textFlow.getChildren().addAll(text1);
+
+			Group group = new Group(textFlow);
+			Scene scene = new Scene(group, 350, 150, Color.WHITE);
+			s.setTitle("Your Answer is");
+			s.setScene(scene);
+			s.show();
+		}
+		else {
+			String family = "Helvetica";
+			double size = 50;
+
+			TextFlow textFlow = new TextFlow();
+			textFlow.setLayoutX(40);
+			textFlow.setLayoutY(40);
+			Text text1 = new Text("INCORRECT!");
+			text1.setFont(Font.font(family, size));
+			text1.setFill(Color.RED);
+
+			textFlow.getChildren().addAll(text1);
+
+			Group group = new Group(textFlow);
+			Scene scene = new Scene(group, 350, 150, Color.WHITE);
+			s.setTitle("Your Answer is");
+			s.setScene(scene);
+			s.show();
+		}
+
+	}
+
+    /**
+	 * After all quiz questions have been answered: 
+	 * Shows the final quiz scores (# correct, # answered, percent correct). 
+	 * Do not show correct answers. 
+	 * Allow user to change settings and try a new quiz
+	 */
     private void displayResults() {
         Stage s = new Stage();
         s.setFullScreen(true);
@@ -417,6 +544,76 @@ public class Main extends Application {
         s.show();
     }
 
+    	/** 
+	 * When the user exits the program: 
+	 * Ask the user for a file name to save all questions to a json file.   ******help
+	 */
+	private void ending() {
+
+	}
+
+	/**
+	 * Provide two buttons on the form:  Save, or Exit without Save.
+	 * Show an alert confirming their choice and providing a goodbye message. 
+	 */
+	private void ending_helper() { // this method was not stated on the TA's Draft
+		Stage s = new Stage();
+		s.setTitle("Are you Not Saving?"); 
+
+		//1. SAVE 
+		Button save = new Button("save"); 
+
+		// create a tile pane 
+		TilePane r = new TilePane(); 
+		Alert a = new Alert(AlertType.NONE);  // ALERT
+
+		// inner class action event 
+		EventHandler<ActionEvent> event = new 
+				EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent e) 
+			{ 
+				a.setAlertType(AlertType.CONFIRMATION); // type
+				a.setContentText("You file have been saved! Have a great day!"); 
+				a.show(); 
+			} 
+		}; 
+
+		//2. "Exit without Save" button
+		Button Exit_Button = new Button();
+		Exit_Button.setText("Exit without Save");
+
+		Alert alert2 = new Alert(AlertType.NONE);
+
+		//inner class event handler
+		EventHandler<ActionEvent> confirm = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				//alert type
+				alert2.setAlertType(AlertType.CONFIRMATION);
+				alert2.setContentText("Are you sure that you want to exit without saving? Have a great day!");
+				alert2.show();
+			}
+		};
+
+		// when button is pressed 
+		save.setOnAction(event); 
+		Exit_Button.setOnAction(confirm);
+
+		// add button 
+		r.getChildren().add(save); 
+		r.getChildren().add(Exit_Button);
+
+		// create a scene 
+		Scene sc = new Scene(r, 100, 100); 
+
+		// set the scene 
+		s.setScene(sc); 
+		s.show();
+	}
+
+    /**
+	 * main method executing Main class 
+	 * @param args
+	 */
     public static void main(String[] args) {
         launch(args);
     }

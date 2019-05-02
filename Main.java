@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.event.ChangeListener;
@@ -25,6 +26,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
@@ -114,7 +116,9 @@ public class Main extends Application {
                     // create radiobuttons
                     VBox r = new VBox(); 
                     RadioButton r1 = new RadioButton("True"); 
-                    RadioButton r2 = new RadioButton("False"); 
+                    r1.setUserData(true);
+                    RadioButton r2 = new RadioButton("False");
+                    r2.setUserData(false);
                     ToggleGroup tg = new ToggleGroup(); 
                     
                     r1.setToggleGroup(tg); 
@@ -136,7 +140,9 @@ public class Main extends Application {
                     // create radiobuttons
                     VBox rr = new VBox();   
                     RadioButton rr1 = new RadioButton("True"); 
+                    rr1.setUserData(true);
                     RadioButton rr2 = new RadioButton("False"); 
+                    rr1.setUserData(false);
                     ToggleGroup tg2 = new ToggleGroup(); 
                     
                     rr1.setToggleGroup(tg2); 
@@ -157,7 +163,9 @@ public class Main extends Application {
                     // create radiobuttons
                     VBox rrr = new VBox();   
                     RadioButton rrr1 = new RadioButton("True"); 
+                    rrr1.setUserData(true);
                     RadioButton rrr2 = new RadioButton("False"); 
+                    rrr2.setUserData(false);
                     ToggleGroup tg3 = new ToggleGroup(); 
                     
                     rrr1.setToggleGroup(tg3); 
@@ -296,6 +304,7 @@ public class Main extends Application {
             root.setCenter(centerVB);
 
             primaryStage.show();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -310,7 +319,29 @@ public class Main extends Application {
     }
 
     private void displayQuestion() {
-
+    	 Stage s = new Stage();
+         BorderPane root = new BorderPane();
+         Scene scene = new Scene(root, 400, 400);
+         VBox centerVB = new VBox();
+         centerVB.setPadding(new Insets(10, 50, 50, 50));
+         centerVB.setSpacing(10);
+         s.setScene(scene);
+         s.show();
+         VBox box = new VBox();
+         box.setPadding(new Insets(10, 50, 50, 50));
+         box.setSpacing(10);
+         Label questionNumber = new Label("Current Question: " + this.currQuestionNum);
+         QuestionNode q = new QuestionNode(this.currQuestion);
+         box.getChildren().add(questionNumber);
+         box.getChildren().add(q.getNode());
+         
+         //need radio buttons for choices
+         Button submit = new Button();
+         submit.setText("Submit");
+         box.getChildren().add(submit);
+         root.setCenter(box);
+    	
+    	
     }
 
     private void displaySubmit(QuestionNode qn) {

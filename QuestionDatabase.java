@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,12 +24,18 @@ public class QuestionDatabase implements QuestionDatabaseADT {
     private Map<String, List<Question>> topics;
 
     public QuestionDatabase() {
-        topics = null;
+        topics = new HashMap<String, List<Question>>();
     }
 
-    public void addQuestion(String topic, Question question ) {
-    	if(topics.containsKey(topic))
-    		topics.get(topic).add(question);
+    public void addQuestion(Question q) {
+        List<Question> addQuestionList = new ArrayList<Question>();
+        addQuestionList.add(q);
+        if (topics.containsKey(q.getTopic())) {
+            topics.get(q.getTopic()).addAll(addQuestionList);
+        } else {
+            topics.put(q.getTopic(), addQuestionList);
+        }
+
     }
 
     public int getNumQuestions() {
@@ -73,20 +80,26 @@ public class QuestionDatabase implements QuestionDatabaseADT {
                 String image = (String) qo.get("image");
                 JSONArray choiceArr = (JSONArray) qo.get("choiceArray");
                 for (int j = 0; j < choiceArr.size(); j++) {
-                    JSONObject co = (JSONObject) choiceArr.get(i);
-                    boolean isCorr = (boolean) co.get("isCorrect");
+                    JSONObject co = (JSONObject) choiceArr.get(j);
+                    String isCorr = (String) co.get("isCorrect");
                     String choiceText = (String) co.get("choice");
-                    Choice newChoice = new Choice(isCorr, choiceText);
-                    if (isCorr == true) {
+                    if (isCorr.equals("T")) {
+                        Choice newChoice = new Choice(true, choiceText);
                         corrChoice = newChoice;
+                        choiceList.add(newChoice);                  
+                    } else {
+                        Choice newChoice = new Choice(false, choiceText);
+                        choiceList.add(newChoice);
                     }
-                    choiceList.add(newChoice);
                 }
-
                 Question newQuestion =
                     new Question(metadata, question, topic, image, choiceList, corrChoice.choice);
                 questionList.add(newQuestion);
-                topics.put(newQuestion.getTopic(), questionList);
+                if (topics.containsKey(newQuestion.getTopic())) {
+                    topics.get(newQuestion.getTopic()).addAll(questionList);
+                } else {
+                    topics.put(newQuestion.getTopic(), questionList);
+                }
                 choiceList.clear();
             }
 
@@ -97,7 +110,6 @@ public class QuestionDatabase implements QuestionDatabaseADT {
     }
 
     public ObservableList<String> getTopics() {
-        
         ObservableList<String> list = FXCollections.observableArrayList();
         list.addAll(topics.keySet());
         java.util.Collections.sort(list);

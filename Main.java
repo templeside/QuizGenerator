@@ -26,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -470,30 +471,18 @@ public class Main extends Application {
         }
 
         // Choices(ToggleGroup)
-        // Radio buttons for choices
-        RadioButton[] buttons = new RadioButton[5]; // max 10 multiple choice?? no limit??
         ToggleGroup group2 = new ToggleGroup();
-
-        for (int i = 0; i < currQuestion.getChoices().size(); i++) {
-            buttons[i] = new RadioButton(currQuestion.getChoices().get(i).choice);
-            buttons[i].setToggleGroup(group2);
-            box.getChildren().add(buttons[i]);
-            root.setRight(box);
-        }
-
+        group2 = q.getChoices();
+          
         Button submit = new Button();
-        submit.setText("Submit"); // IF SUBMIT THEN displaySubmit()
+        submit.setText("Submit"); // IF SUBMIT THEN displaySubmit()get
         box.getChildren().add(submit);
         root.setBottom(box);
-
-        // Submit -> check answer
-        EventHandler<ActionEvent> isCorrect = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                displaySubmit(q); // NEED a question node
-            }
-        };
-        // if submit is pressed, run isCorrect
-        submit.setOnAction(isCorrect);
+        
+        // run displaySubmit if the submit button is pressed
+        submit.setOnAction(e -> {
+            displaySubmit(q);
+        });
     }
 
 

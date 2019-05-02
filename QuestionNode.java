@@ -15,9 +15,9 @@ public class QuestionNode {
     private ToggleGroup choices;
     
     /**
-	 *This is the constructor for the class.
-     *@param q is the Question used to make the QuestionNode
-	 */
+      *This is the constructor for the class.
+      *@param q is the Question used to make the QuestionNode
+      */
     public QuestionNode(Question q) {
         Image image = new Image(q.getImage());
         ImageView imageView = new ImageView(image);
@@ -28,15 +28,15 @@ public class QuestionNode {
     }
     
     /**
-	 *@return node
-	 */
+      *@return node
+      */
     public VBox getNode() {
         return this.node;
     }
     
     /**
-	 *@return choices
-	 */
+      *@return choices
+      */
     public ToggleGroup getChoices() {
         return this.choices;
     }

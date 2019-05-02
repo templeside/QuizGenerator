@@ -279,16 +279,13 @@ public class Main extends Application {
         hb3.setSpacing(58);
         questionBox.getChildren().addAll(hb3);
         //image
-        FileChooser f = new FileChooser();
-        Button browse = new Button("Browse Image File");
-        browse.setOnAction((event) ->
-        {
-        	File file = f.showOpenDialog(primaryStage);
-        	Image img = new Image(file.toURI().toString());
-        	ImageView mv = new ImageView(img);
-        	mv.setImage(img);
-        });
-        questionBox.getChildren().addAll(browse);
+        Label imageLabel = new Label("Enter your image:");
+        TextField textField4 = new TextField();
+        textField4.setPrefWidth(300);
+        HBox hb4 = new HBox();
+        hb4.getChildren().addAll(imageLabel, textField4);
+        hb4.setSpacing(52);
+        questionBox.getChildren().addAll(hb4);
         //adding choice1
         
         Label choice1Label = new Label("Choice1:");

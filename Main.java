@@ -45,6 +45,15 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             primaryStage.setFullScreen(true);
+		
+	    // goes to end_helper to ask about saving
+	    //for closing // HELPPP
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		public void handle(WindowEvent we) {
+					ending_helper();
+					Platform.exit();
+				}
+			});
             // top
             FileChooser fileChooser = new FileChooser(); 
             Desktop desktop = Desktop.getDesktop();

@@ -102,82 +102,81 @@ public class Main extends Application {
                 	displayAddQuestionForm();
                 }
             };
-         // when button is pressed 
-            btn1.setOnAction(event1); 
-
-            Button btn2 = new Button();
-            btn2.setText("Load a json file");
-            leftVB.getChildren().add(btn2);
-            EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() { 
-                public void handle(ActionEvent e) 
-                {
+            btn1.setOnAction(event1);//set the action for adding question button when the button is pressed
+            
+         // Adding a json file            
+            Button btn2 = new Button();//making a button
+            btn2.setText("Load a json file");//text of the button
+            leftVB.getChildren().add(btn2);//set the button in the left Vbox
+            
+            EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {//defining event for btn2
+                public void handle(ActionEvent e) {
                 	
-                	File file = fileChooser.showOpenDialog(primaryStage);
-                	String output = "file path";
+                	File file = fileChooser.showOpenDialog(primaryStage);//browsing file from computer
                 	StringBuffer stringBuffer = new StringBuffer();
-                    if (file != null) {
+                    if (file != null) {//reading the file line by line
                     	try {
                     		FileReader fileReader = new FileReader(file);
                 			BufferedReader bufferedReader = new BufferedReader(fileReader);
                 			
                 			String line;
-                			while ((line = bufferedReader.readLine()) != null) {
+                			while ((line = bufferedReader.readLine()) != null) {//print the file content 
                 				stringBuffer.append(line);
                 				stringBuffer.append("\n");
                 				System.out.println(line);
                 			}
                 			                           
-                			fileReader.close();
+                			fileReader.close();//close the file
                     	}
-                    	catch(Exception ex)
+                    	catch(Exception ex)//any exceptions
                     	{
                     		ex.printStackTrace();
                     	}
                     }
-                	VBox jsonBox = new VBox();
+                	VBox jsonBox = new VBox();//making json window
                 	Label newJson = new Label();
-                	newJson.setText(stringBuffer.toString());
+                	newJson.setText(stringBuffer.toString());//write the json file content in the json window
 
-                	jsonBox.getChildren().add(newJson);
-                	Button backBtn = new Button();
-                    backBtn.setText("Back to Main Page");
-                    leftVB.getChildren().add(backBtn);
-                    backBtn.setOnAction(new EventHandler<ActionEvent>() {
+                	jsonBox.getChildren().add(newJson);//connect the new json window to json box
+                	Button backBtn = new Button();//making back button
+                    backBtn.setText("Back to Main Page");//text of the button
+                    leftVB.getChildren().add(backBtn);//set the back button to leftVB
+                    backBtn.setOnAction(new EventHandler<ActionEvent>() {//define event of back button
                     	@Override
-                    	public void handle(ActionEvent event) {
+                    	public void handle(ActionEvent event) {//going to scene which is main page
                     		primaryStage.setScene(scene);
-                            primaryStage.show();
+                            primaryStage.show();//show the page
                     	}
                     		
                    });
-                	jsonBox.getChildren().addAll(backBtn);
+                	jsonBox.getChildren().addAll(backBtn);//set back button to json window
                 	Scene jsonScene = new Scene(jsonBox, 400, 400);                	
-                	primaryStage.setScene(jsonScene);
+                	primaryStage.setScene(jsonScene);//going to json scene
                     primaryStage.show();
                }
             };
-         // when button is pressed 
-            btn2.setOnAction(event2); 
-
-            Button btn3 = new Button();
-            btn3.setText("Save the current questions to a json file");
-            leftVB.getChildren().add(btn3);
-            EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() { 
+            btn2.setOnAction(event2);//set the action for back to main page button when the button is pressed
+            
+            
+         // defining the button "save the current question to a json file"            
+            Button btn3 = new Button();//defining the button
+            btn3.setText("Save the current questions to a json file");//text of the button
+            leftVB.getChildren().add(btn3);//set the button to the left of Vbox
+            EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() {//defining button event
                 public void handle(ActionEvent e) 
                 {
                 	VBox questionBox = new VBox();
-                	Label newQuestion = new Label();
-                	newQuestion.setText("Enter the question");
-                	questionBox.getChildren().add(newQuestion);
-                	Scene questionScene = new Scene(questionBox, 400, 400);                	
-                	primaryStage.setScene(questionScene);
+                	Label newQuestion = new Label();//question label
+                	newQuestion.setText("Enter the question");//set the button text
+                	questionBox.getChildren().add(newQuestion);//connect new question label to its window
+                	Scene questionScene = new Scene(questionBox, 400, 400);//new window               	
+                	primaryStage.setScene(questionScene);//set the question scene for new window
                     primaryStage.show();
                }
             };
-         // when button is pressed 
-            btn3.setOnAction(event3); 
+            btn3.setOnAction(event3);//set the action of save the current question when button is pressed 
 
-            root.setLeft(leftVB);
+            root.setLeft(leftVB);//set the button to the left of the border pane
 
             // right
             VBox rightVB = new VBox();
@@ -251,62 +250,66 @@ public class Main extends Application {
 
     private void displayAddQuestionForm() {
 //    	sceneAddFormNode
-    	AddQuestionFormNode addQuestionFormNode = new AddQuestionFormNode();
-    	VBox questionBox = addQuestionFormNode.getNode();
+    	AddQuestionFormNode addQuestionFormNode = new AddQuestionFormNode();//set each new question
+    	VBox questionBox = addQuestionFormNode.getNode();//set Vbox
     	
-    	Label numQLabel = new Label("Enter your question: ");
-        TextField textField = new TextField();
-        textField.setPrefWidth(300);
-        HBox hb = new HBox();
-        hb.getChildren().addAll(numQLabel, textField);
-        hb.setSpacing(29);
-
-        questionBox.getChildren().addAll(hb);
+    	Label numQLabel = new Label("Enter your question: ");//label 
+        TextField textField = new TextField();//making text box for question
+        textField.setPrefWidth(300);//text width
+        HBox hb = new HBox();//horizontally
+        hb.getChildren().addAll(numQLabel, textField);//connect text field to Hbox 
+        hb.setSpacing(29);//space between label and text field
+        questionBox.getChildren().addAll(hb);//connect text field to question box 
+        
         //metadata
-        Label metaLabel = new Label("Enter your Metadata:");
-        TextField textField2 = new TextField();
-        textField2.setPrefWidth(300);
-        HBox hb2 = new HBox();
-        hb2.getChildren().addAll(metaLabel, textField2);
-        hb2.setSpacing(28);
-        questionBox.getChildren().addAll(hb2);
+        Label metaLabel = new Label("Enter your Metadata:");//label
+        TextField textField2 = new TextField();//making text box for metadata
+        textField2.setPrefWidth(300);//text width
+        HBox hb2 = new HBox();//horizontally
+        hb2.getChildren().addAll(metaLabel, textField2);//connect text field to Hbox 
+        hb2.setSpacing(28);//space between label and text field
+        questionBox.getChildren().addAll(hb2);//connect text field to question box 
+        
         //topic
-        Label topicLabel = new Label("Enter your topic:");
-        TextField textField3 = new TextField();
-        textField3.setPrefWidth(300);
-        HBox hb3 = new HBox();
-        hb3.getChildren().addAll(topicLabel, textField3);
-        hb3.setSpacing(58);
-        questionBox.getChildren().addAll(hb3);
+        Label topicLabel = new Label("Enter your topic:");//label
+        TextField textField3 = new TextField();//making text box for metadata
+        textField3.setPrefWidth(300);//text width
+        HBox hb3 = new HBox();//horizontally
+        hb3.getChildren().addAll(topicLabel, textField3);//connect text field to Hbox
+        hb3.setSpacing(58);//space between label and text field
+        questionBox.getChildren().addAll(hb3);//connect text field to question box 
         //image
-        Label imageLabel = new Label("Enter your image:");
-        TextField textField4 = new TextField();
-        textField4.setPrefWidth(300);
-        HBox hb4 = new HBox();
-        hb4.getChildren().addAll(imageLabel, textField4);
-        hb4.setSpacing(52);
-        questionBox.getChildren().addAll(hb4);
-        //adding choice1
+        FileChooser f = new FileChooser();//making file chooser
+        Button browse = new Button("Browse Image File");//making browse file button
+        browse.setOnAction((event) ->//defining event for browse button
+        {
+        	File file = f.showOpenDialog(primaryStage);
+        	Image img = new Image(file.toURI().toString());//getting and loading the image
+        	ImageView mv = new ImageView(img);
+        	mv.setImage(img);
+        });
+        questionBox.getChildren().addAll(browse);//set the browse button to question box
         
-        Label choice1Label = new Label("Choice1:");
-        TextField textField5 = new TextField();
-        textField5.setPrefWidth(300);
-        HBox hb5 = new HBox();
-        hb5.getChildren().addAll(choice1Label, textField5);
-        hb5.setSpacing(100);
-        questionBox.getChildren().addAll(hb5);
+        //adding choice1        
+        Label choice1Label = new Label("Choice1:");//label
+        TextField textField5 = new TextField();//making text box for choice
+        textField5.setPrefWidth(300);//text width
+        HBox hb5 = new HBox();//horizontally
+        hb5.getChildren().addAll(choice1Label, textField5);//connect text field to Hbox
+        hb5.setSpacing(100);//space between label and text field
+        questionBox.getChildren().addAll(hb5);//connect text field to question box 
         
-        // create radiobuttons
+        // create radiobuttons for true or false choices
         VBox r = new VBox(); 
         RadioButton r1 = new RadioButton("True"); 
         RadioButton r2 = new RadioButton("False"); 
         ToggleGroup tg = new ToggleGroup(); 
         
-        r1.setToggleGroup(tg); 
+        r1.setToggleGroup(tg);//set the tags for true and false 
         r2.setToggleGroup(tg);
-        r.getChildren().addAll(r1, r2);
+        r.getChildren().addAll(r1, r2);//set the buttons to r
         
-        questionBox.getChildren().addAll(r);
+        questionBox.getChildren().addAll(r);//connect r to question box
 
 
         
@@ -437,8 +440,8 @@ public class Main extends Application {
 //        5. Add Question object to QuestionDatabase
 //        6. At the end we need a button to go back to the main page
         
-        questionScene = new Scene(questionBox, 600, 800);               
-    	primaryStage.setScene(questionScene);
+        questionScene = new Scene(questionBox, 600, 800);//set the size for question window              
+    	primaryStage.setScene(questionScene);//connect the question page to primary stage
         primaryStage.show();
    }
     

@@ -57,9 +57,9 @@ public class Main extends Application {
     //chanwoong jhon change
     
     @Override
-    public void start(Stage primaryStage) {
+     public void start(Stage primaryStage) {
         try {
-            
+            //initialize all of the fields
         	this.primaryStage = primaryStage;
         	questions = null;
         	questionDB = new QuestionDatabase();
@@ -73,7 +73,7 @@ public class Main extends Application {
             // top
             FileChooser fileChooser = new FileChooser(); 
             Desktop desktop = Desktop.getDesktop();
-            Label topLabel = new Label("Welcome to Quiz Generator");
+            Label topLabel = new Label("Welcome to Quiz Generator");//top of screen
             topLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 20));
             BorderPane root = new BorderPane();
             root.setTop(topLabel);
@@ -87,106 +87,138 @@ public class Main extends Application {
             VBox leftVB = new VBox();
             leftVB.setPadding(new Insets(10, 50, 50, 50));
             leftVB.setSpacing(10);
-
+            
             Label leftVBLabel =
                 new Label("Would you like to add a question, load file, or save the current file?");
             leftVBLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
             leftVB.getChildren().add(leftVBLabel);
-
+            //add a question
             Button btn1 = new Button();
             btn1.setText("Add a question");
             leftVB.getChildren().add(btn1);
             EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 {
-                	displayAddQuestionForm();
+                	displayAddQuestionForm();//calls method to show new scene
                 }
             };
-            btn1.setOnAction(event1);//set the action for adding question button when the button is pressed
-            
-         // Adding a json file            
-            Button btn2 = new Button();//making a button
-            btn2.setText("Load a json file");//text of the button
-            leftVB.getChildren().add(btn2);//set the button in the left Vbox
-            
-            EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {//defining event for btn2
-                public void handle(ActionEvent e) {
-                	
-                	File file = fileChooser.showOpenDialog(primaryStage);//browsing file from computer
+         // when button is pressed 
+            btn1.setOnAction(event1); 
+
+            //loading a json file
+            Button btn2 = new Button();
+            btn2.setText("Load a json file");
+            leftVB.getChildren().add(btn2);
+            EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() { 
+                public void handle(ActionEvent e) 
+                {
+                	//get file
+                	File file = fileChooser.showOpenDialog(primaryStage);
+                	String output = "file path";
                 	StringBuffer stringBuffer = new StringBuffer();
-                    if (file != null) {//reading the file line by line
+                    if (file != null) {
                     	try {
                     		FileReader fileReader = new FileReader(file);
                 			BufferedReader bufferedReader = new BufferedReader(fileReader);
                 			
                 			String line;
-                			while ((line = bufferedReader.readLine()) != null) {//print the file content 
+                			while ((line = bufferedReader.readLine()) != null) {
                 				stringBuffer.append(line);
                 				stringBuffer.append("\n");
                 				System.out.println(line);
                 			}
                 			                           
-                			fileReader.close();//close the file
+                			fileReader.close();
                     	}
-                    	catch(Exception ex)//any exceptions
+                    	catch(Exception ex)
                     	{
                     		ex.printStackTrace();
                     	}
                     }
-                	VBox jsonBox = new VBox();//making json window
+                	VBox jsonBox = new VBox();
                 	Label newJson = new Label();
-                	newJson.setText(stringBuffer.toString());//write the json file content in the json window
-
-                	jsonBox.getChildren().add(newJson);//connect the new json window to json box
-                	Button backBtn = new Button();//making back button
-                    backBtn.setText("Back to Main Page");//text of the button
-                    leftVB.getChildren().add(backBtn);//set the back button to leftVB
-                    backBtn.setOnAction(new EventHandler<ActionEvent>() {//define event of back button
+                	newJson.setText(stringBuffer.toString());
+                	//button to go back to main page
+                	jsonBox.getChildren().add(newJson);
+                	Button backBtn = new Button();
+                    backBtn.setText("Back to Main Page");
+                    leftVB.getChildren().add(backBtn);
+                    backBtn.setOnAction(new EventHandler<ActionEvent>() {
                     	@Override
-                    	public void handle(ActionEvent event) {//going to scene which is main page
+                    	public void handle(ActionEvent event) {
                     		primaryStage.setScene(scene);
-                            primaryStage.show();//show the page
+                            primaryStage.show();
                     	}
                     		
                    });
-                	jsonBox.getChildren().addAll(backBtn);//set back button to json window
+                	jsonBox.getChildren().addAll(backBtn);
                 	Scene jsonScene = new Scene(jsonBox, 400, 400);                	
-                	primaryStage.setScene(jsonScene);//going to json scene
+                	primaryStage.setScene(jsonScene);
                     primaryStage.show();
                }
             };
-            btn2.setOnAction(event2);//set the action for back to main page button when the button is pressed
-            
-            
-         // defining the button "save the current question to a json file"            
-            Button btn3 = new Button();//defining the button
-            btn3.setText("Save the current questions to a json file");//text of the button
-            leftVB.getChildren().add(btn3);//set the button to the left of Vbox
-            EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() {//defining button event
+         // when button is pressed 
+            btn2.setOnAction(event2); 
+            //save to a json file
+            Button btn3 = new Button();
+            btn3.setText("Save the current questions to a json file");
+            leftVB.getChildren().add(btn3);
+            EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 {
+                	//file name
                 	VBox questionBox = new VBox();
-                	Label newQuestion = new Label();//question label
-                	newQuestion.setText("Enter the question");//set the button text
-                	questionBox.getChildren().add(newQuestion);//connect new question label to its window
-                	Scene questionScene = new Scene(questionBox, 400, 400);//new window               	
-                	primaryStage.setScene(questionScene);//set the question scene for new window
+                	Label newQuestion = new Label();
+                	newQuestion.setText("Enter the file name: ");
+                	questionBox.getChildren().add(newQuestion);
+                	TextField fileName = new TextField();
+                	questionBox.getChildren().add(fileName);
+                	
+                	//button to save
+                	Button jsonButton = new Button();
+                	jsonButton.setText("Save to file");
+                	questionBox.getChildren().add(jsonButton);
+                	 jsonButton.setOnAction(new EventHandler<ActionEvent>() {
+                      	@Override
+                      	public void handle(ActionEvent event) {
+                      	File f = new File(fileName.getText());//get text for file name
+                      	saveToJson(f);
+                      	}	
+                     });
+                	 //back to main page
+                	 Button backBtn = new Button();
+                     backBtn.setText("Back to Main Page");
+                     questionBox.getChildren().add(backBtn);
+                     backBtn.setOnAction(new EventHandler<ActionEvent>() {
+                     	@Override
+                     	public void handle(ActionEvent event) {
+                     		primaryStage.setScene(scene);
+                     		primaryStage.setFullScreen(true);
+                             primaryStage.show();
+                     	}
+                     		
+                    });
+                	Scene questionScene = new Scene(questionBox, 400, 400);                	
+                	primaryStage.setScene(questionScene);
                     primaryStage.show();
                }
             };
-            btn3.setOnAction(event3);//set the action of save the current question when button is pressed 
+         // when button is pressed 
+            btn3.setOnAction(event3); 
 
-            root.setLeft(leftVB);//set the button to the left of the border pane
+            root.setLeft(leftVB);
 
             // right
             VBox rightVB = new VBox();
             rightVB.setPadding(new Insets(10, 50, 50, 50));
             rightVB.setSpacing(10);
-
+           
+            //user settings
             Label rightVBLabel = new Label("User Settings");
             rightVBLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
             rightVB.getChildren().add(rightVBLabel);
-
+            
+            //number of questions
             Label numQLabel = new Label("Enter the number of questions you would like to answer:");
             Button button = new Button("Submit");
             TextField text = new TextField();
@@ -201,7 +233,8 @@ public class Main extends Application {
             hb.getChildren().addAll(numQLabel, text, button);
             hb.setSpacing(10);
             rightVB.getChildren().addAll(hb);
-
+            
+            //topics
             Label topicLabel = new Label("Topics:");
             Button updateButton = new Button("Update Topics");
             ComboBox<String> topicBox = new ComboBox<String>(
@@ -226,7 +259,8 @@ public class Main extends Application {
             VBox centerVB = new VBox();
             centerVB.setPadding(new Insets(10, 50, 50, 50));
             centerVB.setSpacing(10);
-
+            
+            //starting the quiz
             Label centerLabel = new Label("Press Start to begin the quiz");
             centerLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
 
@@ -247,7 +281,11 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-
+    
+    private void saveToJson(File f) {
+    	//saves the questions to file f
+    	this.questionDB.saveQuestionsToJSON(f);
+    }
     private void displayAddQuestionForm() {
 //    	sceneAddFormNode
     	AddQuestionFormNode addQuestionFormNode = new AddQuestionFormNode();//set each new question

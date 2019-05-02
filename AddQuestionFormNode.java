@@ -30,6 +30,7 @@
 package application;
 
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -45,12 +46,13 @@ public class AddQuestionFormNode {
     private VBox form;
     
     public AddQuestionFormNode() {       
-        choiceTexts = null;
-        choiceGroups = null;
-        form = null;
+        choiceTexts = new ArrayList<TextField>();
+        choiceGroups = new ArrayList<ToggleGroup>();
+        form = new VBox();
     }
     
     public TextField getMetadata() {
+    	
         return null;
         
     }

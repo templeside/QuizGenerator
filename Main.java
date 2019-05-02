@@ -49,6 +49,7 @@ import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -64,8 +65,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 
 public class Main extends Application {
@@ -451,32 +455,45 @@ public class Main extends Application {
 	 */
 	private void displaySubmit(QuestionNode qn) {
 		Stage s = new Stage();
-		s.setFullScreen(true);
-
-		BorderPane root = new BorderPane();
-		Scene scene = new Scene(root, 400, 400);
-		VBox centerVB = new VBox();
-		centerVB.setPadding(new Insets(10, 50, 50, 50));
-		centerVB.setSpacing(10);
-		s.setScene(scene);
-		s.show();
-
-		HBox hb = new HBox();
 
 		//consider CORRECT/INCORRECT
-		TextField each_result = new TextField();
+		if(qn.getChoices().equals(qn.getNode().getUserData())) { //TA
+			String family = "Helvetica";
+	    	double size = 50;
 
-		if(qn.getChoices().equals(qn.getNode().getUserData())) { //??????
-			each_result.setText("CORRECT!");
-			each_result.setStyle("-fx-text-fill: green; -fx-font-size: 16px;");
-			hb.getChildren().addAll(each_result);    
-			hb.setSpacing(10);
+	    	TextFlow textFlow = new TextFlow();
+	    	textFlow.setLayoutX(40);
+	    	textFlow.setLayoutY(40);
+	    	Text text1 = new Text("CORRECT!");
+	    	text1.setFont(Font.font(family, size));
+	    	text1.setFill(Color.GREEN);
+
+	    	textFlow.getChildren().addAll(text1);
+
+	    	Group group = new Group(textFlow);
+	    	Scene scene = new Scene(group, 350, 150, Color.WHITE);
+	    	s.setTitle("Your Answer is");
+	    	s.setScene(scene);
+	    	s.show();
 		}
 		else {
-			each_result.setText("INCORRECT!");
-			each_result.setStyle("-fx-text-fill: red; -fx-font-size: 16px;");
-			hb.getChildren().addAll(each_result); 
-			hb.setSpacing(10);
+	    	String family = "Helvetica";
+	    	double size = 50;
+
+	    	TextFlow textFlow = new TextFlow();
+	    	textFlow.setLayoutX(40);
+	    	textFlow.setLayoutY(40);
+	    	Text text1 = new Text("INCORRECT!");
+	    	text1.setFont(Font.font(family, size));
+	    	text1.setFill(Color.RED);
+
+	    	textFlow.getChildren().addAll(text1);
+
+	    	Group group = new Group(textFlow);
+	    	Scene scene = new Scene(group, 350, 150, Color.WHITE);
+	    	s.setTitle("Your Answer is");
+	    	s.setScene(scene);
+	    	s.show();
 		}
 
 	}

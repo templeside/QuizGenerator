@@ -8,23 +8,23 @@ public class Choice {
     public String choice;
     
     /**
-	 *This is the constructor for the class.
-	 */
+      *This is the constructor for the class.
+      */
     public Choice(boolean correctAnswer, String newChoice) {
         this.isCorrect = correctAnswer;
         this.choice = newChoice;
     }
     
     /**
-	 *@return the choice.
-	 */
+      *@return the choice.
+      */
     public String getChoice() {
         return this.choice;
     }
     
     /**
-	 *@return true if the choice is correct, false if the choice is incorrect
-	 */
+      *@return true if the choice is correct, false if the choice is incorrect
+      */
     public boolean getIsCorrect() {
         return this.isCorrect;
     }

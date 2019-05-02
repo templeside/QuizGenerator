@@ -26,8 +26,9 @@ public class QuestionDatabase implements QuestionDatabaseADT {
         topics = null;
     }
 
-    public void addQuestion() {
-        AddQuestionFormNode aqfn = new AddQuestionFormNode();
+    public void addQuestion(String topic, Question question ) {
+    	if(topics.containsKey(topic))
+    		topics.get(topic).add(question);
     }
 
     public int getNumQuestions() {

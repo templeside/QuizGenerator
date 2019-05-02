@@ -166,7 +166,7 @@ public class Main extends Application {
 
                     questionBox.getChildren().addAll(rrr);
                     
-                      //add choice 4
+                      //add choice4
                     Label choice4Label = new Label("Choice4:");
                     TextField textField8 = new TextField();
                     HBox hb8 = new HBox();
@@ -185,7 +185,7 @@ public class Main extends Application {
 
                     questionBox.getChildren().addAll(rrrr);
                     
-                    //add choice 5
+                    //add choice5
                     Label choice5Label = new Label("Choice5:");
                     TextField textField9 = new TextField();
                     HBox hb9 = new HBox();

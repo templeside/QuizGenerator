@@ -166,6 +166,44 @@ public class Main extends Application {
 
                     questionBox.getChildren().addAll(rrr);
                     
+                      //add choice 4
+                    Label choice4Label = new Label("Choice4:");
+                    TextField textField8 = new TextField();
+                    HBox hb8 = new HBox();
+                    hb8.getChildren().addAll(choice4Label, textField8);
+                    hb8.setSpacing(10);
+                    questionBox.getChildren().addAll(hb8);
+                    // create radiobuttons
+                    VBox rrrr = new VBox();   
+                    RadioButton rrrr1 = new RadioButton("True"); 
+                    RadioButton rrrr2 = new RadioButton("False"); 
+                    ToggleGroup tg4 = new ToggleGroup(); 
+                    
+                    rrrr1.setToggleGroup(tg4); 
+                    rrrr2.setToggleGroup(tg4);
+                    rrrr.getChildren().addAll(rrrr1,rrrr2); 
+
+                    questionBox.getChildren().addAll(rrrr);
+                    
+                    //add choice 5
+                    Label choice5Label = new Label("Choice5:");
+                    TextField textField9 = new TextField();
+                    HBox hb9 = new HBox();
+                    hb9.getChildren().addAll(choice5Label, textField9);
+                    hb9.setSpacing(10);
+                    questionBox.getChildren().addAll(hb9);
+                    //radio buttons
+                    VBox rrrrr = new VBox();   
+                    RadioButton rrrrr1 = new RadioButton("True"); 
+                    RadioButton rrrrr2 = new RadioButton("False"); 
+                    ToggleGroup tg5 = new ToggleGroup(); 
+                    
+                    rrrrr1.setToggleGroup(tg5); 
+                    rrrrr2.setToggleGroup(tg5);
+                    rrrrr.getChildren().addAll(rrrrr1,rrrrr2); 
+
+                    questionBox.getChildren().addAll(rrrrr);
+                   
                     Button addQuestionBtn = new Button("Add Question");
                     addQuestionBtn.setOnAction(new EventHandler<ActionEvent>() {
                     	

@@ -152,6 +152,7 @@ public class Main extends Application {
                        @Override
                        public void handle(ActionEvent event) {
                           primaryStage.setScene(scene);
+                          primaryStage.setFullScreen(true);
                             primaryStage.show();
                        }
                           
@@ -317,7 +318,7 @@ public class Main extends Application {
        textField.setPrefWidth(300);//text width
        HBox hb = new HBox();//horizontally
        hb.getChildren().addAll(numQLabel, textField);//connect text field to Hbox 
-       hb.setSpacing(29);//space between label and text field
+       hb.setSpacing(27);//space between label and text field
        questionBox.getChildren().addAll(hb);//connect text field to question box 
 
         
@@ -327,7 +328,7 @@ public class Main extends Application {
        textField2.setPrefWidth(300);//text width
        HBox hb2 = new HBox();//horizontally
        hb2.getChildren().addAll(metaLabel, textField2);//connect text field to Hbox 
-       hb2.setSpacing(28);//space between label and text field
+       hb2.setSpacing(26);//space between label and text field
        questionBox.getChildren().addAll(hb2);//connect text field to question box
 
         //topic
@@ -336,7 +337,7 @@ public class Main extends Application {
        textField3.setPrefWidth(300);//text width
        HBox hb3 = new HBox();//horizontally
        hb3.getChildren().addAll(topicLabel, textField3);//connect text field to Hbox
-       hb3.setSpacing(58);//space between label and text field
+       hb3.setSpacing(53);//space between label and text field
        questionBox.getChildren().addAll(hb3);//connect text field to question box 
 
         //image
@@ -345,7 +346,7 @@ public class Main extends Application {
         textField4.setPrefWidth(300);
         HBox hb4 = new HBox();
         hb4.getChildren().addAll(imageLabel, textField4);//add label and textfield to hbox
-        hb4.setSpacing(20);//space between label and textfield
+        hb4.setSpacing(15);//space between label and textfield
         questionBox.getChildren().addAll(hb4);//connect hbox to questionBox
         
         addChoiceHboxAndRadioBox(questionBox);
@@ -416,7 +417,7 @@ public class Main extends Application {
 //        primaryStage.show();
         
         
-        questionScene = new Scene(questionBox, 600, 800);//dimensions of page           
+        questionScene = new Scene(questionBox, 600, 600);//dimensions of page           
        primaryStage.setScene(questionScene);
         primaryStage.show();//show add question page
    }

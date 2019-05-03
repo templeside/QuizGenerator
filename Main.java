@@ -126,11 +126,11 @@ public class Main extends Application {
                 			while ((line = bufferedReader.readLine()) != null) {
                 				stringBuffer.append(line);
                 				stringBuffer.append("\n");
-                				System.out.println(line);
+//                				System.out.println(line);
                 			}
                 			                           
                 			fileReader.close();
-                			System.out.println("FILE is "+file);
+//                			System.out.println("FILE is "+file);
                 			questionDB.loadQuestionsFromJSON(file);
             
                     	}
@@ -204,11 +204,11 @@ public class Main extends Application {
             NumQuestionbutton.setOnAction(e -> {
                 if (Integer.parseInt(text.getText()) < this.totalNumQuestions) {
                 	this.totalNumQuestions = Integer.parseInt(text.getText());
-                    System.out.println("totalNumQuestions after NumQuestionbutton is pressed22222" + totalNumQuestions);
+//                    System.out.println("totalNumQuestions after NumQuestionbutton is pressed22222" + totalNumQuestions);
                     
                 } else {
                     this.totalNumQuestions = questionDB.getNumQuestions();
-                    System.out.println("totalNumQuestions after NumQuestionbutton is pressed" + totalNumQuestions); /// erase this later
+//                    System.out.println("totalNumQuestions after NumQuestionbutton is pressed" + totalNumQuestions); /// erase this later
 
                 }
             });
@@ -289,11 +289,11 @@ public class Main extends Application {
      * update questions --> used for each question display
      */
     private void startButtonPressed() {
-    	System.out.println("In start Button method");
+//    	System.out.println("In start Button method");
         this.topic = grabTopic.getValue();
-        System.out.println("this.topic == " + this.topic);
+//        System.out.println("this.topic == " + this.topic);
         
-        System.out.println("chosen totalNumQuestions updated is " + totalNumQuestions);
+//        System.out.println("chosen totalNumQuestions updated is " + totalNumQuestions);
         
         displayQuiz(this.topic);
     }
@@ -524,8 +524,8 @@ public class Main extends Application {
             this.currQuestionNum++;
 //            displayQuestion();
             
-            System.out.println("currQuestionNum " +currQuestionNum);
-            System.out.println("Total question "+ totalNumQuestions);
+//            System.out.println("currQuestionNum " +currQuestionNum);
+//            System.out.println("Total question "+ totalNumQuestions);
             
             displayQuestion();
         }
@@ -538,35 +538,67 @@ public class Main extends Application {
 	 * If a question has no image, this window will be blank, or show a background color or image.
 	 */
     private void displayQuestion() {
+    	System.out.println("displayQuestion()");
 		Stage s = new Stage();
 		s.setTitle("Each Question");
 		BorderPane root = new BorderPane();
-//		Scene scene = new Scene(root, 400, 400);
-
-		//not sure if we still need this
-//				VBox centerVB = new VBox();
-//				centerVB.setPadding(new Insets(10, 50, 50, 50));
-//				centerVB.setSpacing(10);
-		
-//		s.setScene(scene);
-//		s.show();
 
 		// Current Question:#   Total Q#
 		VBox box = new VBox();
-		box.setPadding(new Insets(100, 50, 50, 50));
+		box.setPadding(new Insets(20, 50, 50, 50));
 		box.setSpacing(10);
 		Label questionNumber = new Label("Current Question: " + this.currQuestionNum + "     Total: " + totalNumQuestions);
 		QuestionNode q = new QuestionNode(this.currQuestion);
 		box.getChildren().add(questionNumber);
 		box.getChildren().add(q.getNode());
+		System.out.println("q"+q);
+//		box.autosize();
+		
 
 		//Question(Label) : Displays the question text
-		TextFlow textFlow = new TextFlow();
-		textFlow.setLayoutX(400);
-		textFlow.setLayoutY(40);
-		Text text1 = new Text(currQuestion.getQuestion());
-		box.getChildren().add(text1);
-		root.setCenter(text1);
+//		TextFlow textFlow = new TextFlow();
+//		textFlow.setLayoutX(100);
+//		textFlow.setLayoutY(100);
+//		Text text1 = new Text(currQuestion.getQuestion());
+//		box.getChildren().add(text1);
+//		root.setCenter(text1);
+		
+
+		//Choices(ToggleGroup)
+		//Radio buttons for choices
+		RadioButton[] buttons = new RadioButton[5]; // max 10 multiple choice?? no limit??
+		System.out.println(buttons);
+		
+		ToggleGroup group2 = new ToggleGroup();
+		
+		for( int i=0; i<currQuestion.getChoices().size(); i++) {
+			System.out.println("What's geti getchoice" + currQuestion.getChoices().get(i).getChoice());
+			
+			buttons[i] = new RadioButton(currQuestion.getChoices().get(i).getChoice());
+			buttons[i].setText(currQuestion.getChoices().get(i).getChoice());
+			
+			
+			buttons[i].setToggleGroup(group2);
+			box.getChildren().add(buttons[i]);
+		}
+	
+		Button submit = new Button();
+		submit.setText("Submit"); // IF SUBMIT THEN displaySubmit()
+		box.getChildren().add(submit);
+		root.setCenter(box);
+		
+		//Submit -> check answer
+		EventHandler<ActionEvent> isCorrect = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				displaySubmit(q);	//NEED a question node		
+			}
+		};
+		//if submit is pressed, run isCorrect
+		submit.setOnAction(isCorrect);
+		
+		
+		
+		
 
 //		//Image 
 //		// check if this works
@@ -575,32 +607,10 @@ public class Main extends Application {
 //		imageView.setFitHeight(200); //200x200 pixel frame
 //		imageView.setFitWidth(200);
 //		root.setCenter(imageView);
-//
-//		//Choices(ToggleGroup)
-//		//Radio buttons for choices
-//		RadioButton[] buttons = new RadioButton[5]; // max 10 multiple choice?? no limit??
-//		ToggleGroup group2 = new ToggleGroup();
-//		
-//		for( int i=0; i<currQuestion.getChoices().size(); i++) {
-//			buttons[i] = new RadioButton(currQuestion.getChoices().get(i).choice);
-//			buttons[i].setToggleGroup(group2);
-//			box.getChildren().addAll(buttons[i]);
-//		}
-//	
-//		Button submit = new Button();
-//		submit.setText("Submit"); // IF SUBMIT THEN displaySubmit()
-//		box.getChildren().add(submit);
-//		root.setBottom(box);
-//		
-//		//Submit -> check answer
-//		EventHandler<ActionEvent> isCorrect = new EventHandler<ActionEvent>() {
-//			public void handle(ActionEvent e) {
-//				displaySubmit(q);	//NEED a question node		
-//			}
-//		};
-//		//if submit is pressed, run isCorrect
-//		submit.setOnAction(isCorrect);
-//		
+
+		
+		
+		
 		Scene scene = new Scene(root, 400, 400);
 		s.setScene(scene);
 		s.show();
@@ -616,6 +626,8 @@ public class Main extends Application {
     private void displaySubmit(QuestionNode qn) {
 		Stage s = new Stage();
 
+//		System.out.println("what is my node here (displaySubmit)  " + qn);
+		
 		//consider CORRECT/INCORRECT
 		if(qn.getChoices().equals(qn.getNode().getUserData())) { //TA
 			String family = "Helvetica";

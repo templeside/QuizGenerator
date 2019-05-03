@@ -275,49 +275,50 @@ public class Main extends Application {
 
     private void displayAddQuestionForm() {
 //       sceneAddFormNode
-       AddQuestionFormNode addQuestionFormNode = new AddQuestionFormNode();
-       VBox questionBox = addQuestionFormNode.getNode();
+       AddQuestionFormNode addQuestionFormNode = new AddQuestionFormNode();//set each new question
+       VBox questionBox = addQuestionFormNode.getNode();//set Vbox
        
        
-       Label numQLabel = new Label("Enter your question: ");
-        TextField textField = new TextField();
-        textField.setPrefWidth(300);
-        HBox hb = new HBox();
-        hb.getChildren().addAll(numQLabel, textField);
-        hb.setSpacing(29);
-        questionBox.getChildren().addAll(hb);
+       Label numQLabel = new Label("Enter your question: ");//label 
+       TextField textField = new TextField();//making text box for question
+       textField.setPrefWidth(300);//text width
+       HBox hb = new HBox();//horizontally
+       hb.getChildren().addAll(numQLabel, textField);//connect text field to Hbox 
+       hb.setSpacing(29);//space between label and text field
+       questionBox.getChildren().addAll(hb);//connect text field to question box 
+
         
         //metadata
-        Label metaLabel = new Label("Enter your Metadata:");
-        TextField textField2 = new TextField();
-        textField2.setPrefWidth(300);
-        HBox hb2 = new HBox();
-        hb2.getChildren().addAll(metaLabel, textField2);
-        hb2.setSpacing(28);
-        questionBox.getChildren().addAll(hb2);
+       Label metaLabel = new Label("Enter your Metadata:");//label
+       TextField textField2 = new TextField();//making text box for metadata
+       textField2.setPrefWidth(300);//text width
+       HBox hb2 = new HBox();//horizontally
+       hb2.getChildren().addAll(metaLabel, textField2);//connect text field to Hbox 
+       hb2.setSpacing(28);//space between label and text field
+       questionBox.getChildren().addAll(hb2);//connect text field to question box
 
         //topic
-        Label topicLabel = new Label("Enter your topic:");
-        TextField textField3 = new TextField();
-        textField3.setPrefWidth(300);
-        HBox hb3 = new HBox();
-        hb3.getChildren().addAll(topicLabel, textField3);
-        hb3.setSpacing(58);
-        questionBox.getChildren().addAll(hb3);
+       Label topicLabel = new Label("Enter your topic:");//label
+       TextField textField3 = new TextField();//making text box for metadata
+       textField3.setPrefWidth(300);//text width
+       HBox hb3 = new HBox();//horizontally
+       hb3.getChildren().addAll(topicLabel, textField3);//connect text field to Hbox
+       hb3.setSpacing(58);//space between label and text field
+       questionBox.getChildren().addAll(hb3);//connect text field to question box 
 
         //image
         Label imageLabel = new Label("Enter Image File name:");
-        TextField textField4 = new TextField();
+        TextField textField4 = new TextField();//textfield for image path
         HBox hb4 = new HBox();
-        hb4.getChildren().addAll(imageLabel, textField4);
-        hb4.setSpacing(10);
-        questionBox.getChildren().addAll(hb4);
+        hb4.getChildren().addAll(imageLabel, textField4);//add label and textfield to hbox
+        hb4.setSpacing(10);//space between label and textfield
+        questionBox.getChildren().addAll(hb4);//connect hbox to questionBox
         
         addChoiceHboxAndRadioBox(questionBox);
         
 
        
-        Button addQuestionBtn = new Button("Add Question");
+        Button addQuestionBtn = new Button("Add Question");//press to save question
         addQuestionBtn.setOnAction(new EventHandler<ActionEvent>() {
            
            @Override
@@ -326,17 +327,17 @@ public class Main extends Application {
         		   System.out.println("index is "+i + "and children is "+questionBox.getChildren().get(i));
         	   }
         	   
-              String newMetadata =  addQuestionFormNode.getMetadata().getText();
-              String newQuestion =  addQuestionFormNode.getQuestion().getText();
-              String newTopic =  addQuestionFormNode.getTopic().getText();
-              String newImage = addQuestionFormNode.getImage().getText();
-              List<Choice> newChoices = new ArrayList<Choice>();
-              for(int i = 0; i < addQuestionFormNode.getChoiceGroups().size(); i++) {
+              String newMetadata =  addQuestionFormNode.getMetadata().getText();//metadata from user
+              String newQuestion =  addQuestionFormNode.getQuestion().getText();//question from user
+              String newTopic =  addQuestionFormNode.getTopic().getText();//topic from user
+              String newImage = addQuestionFormNode.getImage().getText();//image path from user
+              List<Choice> newChoices = new ArrayList<Choice>();//choices from user
+              for(int i = 0; i < addQuestionFormNode.getChoiceGroups().size(); i++) {//add choices
             	  newChoices.add(new Choice(addQuestionFormNode.getChoiceGroups().get(i), addQuestionFormNode.getChoiceTexts().get(i)));
               }
               String answer = "";
               
-              for(int i=0;i<newChoices.size();i++) {
+              for(int i=0;i<newChoices.size();i++) {//find correct choice
             	  if(newChoices.get(i).getIsCorrect()) {
             		  answer = newChoices.get(i).getChoice();
             	  }
@@ -349,49 +350,41 @@ public class Main extends Application {
               System.out.println("newTopic is "+ newTopic);
               System.out.println("newImage is "+ newImage);
               
+              //create new question with data from the user
               Question question = new Question( newMetadata, newQuestion, newTopic,newImage, newChoices, answer);
               
+              //add the question to the database
               questionDB.addQuestion(newTopic, question);
 
-//              1. Here, get all the text from the respective textfields like question test, choices
-//              and everything else.
-//              2. Create a new Question object
-//              3. add the question object to the QuestionDatabase
               //Scene backScene = new Scene(root, 400, 400);    
 
               
            }
         });
 //        back button
-        Button backBtn = new Button();
+        Button backBtn = new Button();//press button to go back to main screen
         backBtn.setText("Back to Main Page");
         backBtn.setOnAction(new EventHandler<ActionEvent>() {
            @Override
            public void handle(ActionEvent event) {
-              primaryStage.setScene(scene);
+              primaryStage.setScene(scene);//scene is the main page
               primaryStage.setFullScreen(true);
                 primaryStage.show();
            }
               
        });
         
-        questionBox.getChildren().addAll(addQuestionBtn);
+        questionBox.getChildren().addAll(addQuestionBtn);//add buttons to questionBox
         questionBox.getChildren().addAll(backBtn);
     
 //        Scene scene = new Scene(questionBox, 500,500);
 //       primaryStage.setScene(scene);
 //        primaryStage.show();
         
-//        1. create a new button for saving the question
-//        2. do the following steps in the button onclick event handler
-//        3. get all the question details from the question box fields - TextField
-//        4. Create a new Question object
-//        5. Add Question object to QuestionDatabase
-//        6. At the end we need a button to go back to the main page
         
-        questionScene = new Scene(questionBox, 600, 800);               
+        questionScene = new Scene(questionBox, 600, 800);//dimensions of page           
        primaryStage.setScene(questionScene);
-        primaryStage.show();
+        primaryStage.show();//show add question page
    }
     
 
@@ -400,13 +393,13 @@ public class Main extends Application {
    private void addChoiceHboxAndRadioBox(VBox questionBox) {
 	   int j;
 	   for (j=0;j<5;j++) {
-       Label choice2Label = new Label("Choice"+j+":");
-       TextField textField6 = new TextField();
-       textField6.setPrefWidth(300);
+       Label choice2Label = new Label("Choice"+j+":");//label for each choice
+       TextField textField6 = new TextField();//textfield for each choice
+       textField6.setPrefWidth(300);//width of textfield
        HBox hb6 = new HBox();
-       hb6.getChildren().addAll(choice2Label, textField6);
-       hb6.setSpacing(100);
-       questionBox.getChildren().addAll(hb6);
+       hb6.getChildren().addAll(choice2Label, textField6);//add label and textfield
+       hb6.setSpacing(100);//spacing between textfield and label
+       questionBox.getChildren().addAll(hb6);//add hbox to questionBox
        
        // create radiobuttons
        VBox r = new VBox();   
@@ -414,11 +407,11 @@ public class Main extends Application {
        RadioButton r2 = new RadioButton("False"); 
        ToggleGroup tg2 = new ToggleGroup(); 
        
-       r1.setToggleGroup(tg2); 
+       r1.setToggleGroup(tg2); //set the toggle group for true and false
        r2.setToggleGroup(tg2);
-       r.getChildren().addAll(r1, r2); 
+       r.getChildren().addAll(r1, r2); //add the buttons to vbox
 
-       questionBox.getChildren().addAll(r);
+       questionBox.getChildren().addAll(r);//add vbox to QuestionBox
 	   }
 		
 	}

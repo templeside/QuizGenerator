@@ -46,58 +46,83 @@ import javafx.scene.layout.VBox;
 
 public class AddQuestionFormNode {
     
-    private List<Choice> choiceTexts;
-    private List<Boolean> choiceGroups;
-    private VBox form;
+    private List<Choice> choiceTexts;//text of choices
+    private List<Boolean> choiceGroups;//indicates if choice is correct or incorrect
+    private VBox form;//filled with question data
     
+    /**
+     * This is the constructor for the class.
+     */
     public AddQuestionFormNode() {       
-        choiceTexts = new ArrayList<Choice>();
+    	//initialize all fields
+    	choiceTexts = new ArrayList<Choice>();
         choiceGroups = new ArrayList<Boolean>();
         form = new VBox();
     }
     
+    /**
+     * @return the typed question
+     */
     public String getQuestion() {
     	return ((TextField)((HBox)form.getChildren().get(0)).getChildren().get(1)).getText();               
     }
     
+    /**
+     * @return the metadata for the question
+     */
     public String getMetadata() {
     	return ((TextField)((HBox)form.getChildren().get(1)).getChildren().get(1)).getText();
     }    
 
-    
+    /**
+     * @return the topic of the question
+     */
     public String getTopic() {
     	return ((TextField)((HBox)form.getChildren().get(2)).getChildren().get(1)).getText();        
     }
 
+    
+    /**
+     * @return the path to the image of the question
+     */
     public String getImage() {
     	return ((TextField)((HBox)form.getChildren().get(3)).getChildren().get(1)).getText();        
     }
     
+    /**
+     * @return the choices that the user can choose from
+     */
     public List<Choice> getChoiceTexts() {    	    	
     	int i;
-    	for(i = 0;i<5;i++) {
+    	for(i = 0;i<5;i++) {//gets all of the choice text
     	HBox hb = (HBox) form.getChildren().get((i*2)+4);
     	
    	
     	Choice choice = new Choice(this.getChoiceGroups().get(i),hb.getChildren().get(1).toString());
-    	choiceTexts.add(choice);
+    	choiceTexts.add(choice);//adds choice to the list
     	}
         return choiceTexts;
         
         
     }
     
+    /**
+     * @return form, the vbox that contains question data
+     */
     public VBox getNode() {
     	return form;
         
     }
     
+    /**
+     * @return a list of booleans that indicates if choices are correct or incorrect
+     */
     public List<Boolean> getChoiceGroups() {
-    	for(int i = 0;i<5;i++) {
+    	for(int i = 0;i<5;i++) {//finds if each choice is correct or incorrect
     		VBox newbox = ((VBox)form.getChildren().get((i*2)+5));
     		
         	RadioButton radioTrue =  (RadioButton)newbox.getChildren().get(0);
-        	choiceGroups.add(radioTrue.isSelected());     
+        	choiceGroups.add(radioTrue.isSelected());     //add boolean value to the list
     	}
     	return choiceGroups;
     }

@@ -35,55 +35,68 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import javafx.scene.Node;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class AddQuestionFormNode {
     
-    private List<TextField> choiceTexts;
-    private List<ToggleGroup> choiceGroups;
+    private List<String> choiceTexts;
+    private List<Boolean> choiceGroups;
     private VBox form;
     
     public AddQuestionFormNode() {       
-        choiceTexts = new ArrayList<TextField>();
-        choiceGroups = new ArrayList<ToggleGroup>();
+        choiceTexts = new ArrayList<String>();
+        choiceGroups = new ArrayList<Boolean>();
         form = new VBox();
+    }
+    
+    public TextField getQuestion() {
+        return (TextField) form.getChildren().get(0);
+               
     }
     
     public TextField getMetadata() {
     	
-        return null;
+        return (TextField) form.getChildren().get(1);
         
-    }
-    
-    public TextField getQuestion() {
-        return null;
-               
-    }
+    }    
+
     
     public TextField getTopic() {
-        return null;
+    	return (TextField) form.getChildren().get(2);
         
     }
 
     public TextField getImage() {
-        return null;
+        return (TextField) form.getChildren().get(3);
         
     }
     
-    public List<TextField> getChoiceTexts() {
+    public List<String> getChoiceTexts() {    	
+    	int i;
+    	for(i = 4;i<=19;i = i+3) {
+    	HBox hb = (HBox) form.getChildren().get(i);
+    	choiceTexts.add((String)(hb.getChildren().get(1)).toString());
+    	}
         return choiceTexts;
         
     }
     
     public VBox getNode() {
-        return form;
+    	return form;
         
     }
     
-    public List<ToggleGroup> getChoiceGroups() {
-        return choiceGroups;
-        
+    public List<Boolean> getChoiceGroups() {
+    	for(int i = 5;i<=19;i = i+3) {
+        	RadioButton radioTrue =  (RadioButton) form.getChildren().get(i);
+        	choiceGroups.add(radioTrue.isSelected());     
+    	}
+    	return choiceGroups;
     }
 }

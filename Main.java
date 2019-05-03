@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 
+import javax.swing.event.ChangeListener;
+
 import javafx.application.Application;
-import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,14 +17,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,7 +39,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-
 
 
 public class Main extends Application {
@@ -54,9 +57,9 @@ public class Main extends Application {
     //chanwoong jhon change
     
     @Override
-     public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) {
         try {
-            //initialize all of the fields
+            
         	this.primaryStage = primaryStage;
         	questions = null;
         	questionDB = new QuestionDatabase();
@@ -66,18 +69,11 @@ public class Main extends Application {
         	totalNumQuestions = 0;
         	numIncorrect = 0;
             primaryStage.setFullScreen(true);
-		
-			//for closing		
-			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-				public void handle(WindowEvent we) {
-					ending_helper();
-				}
-			});
 
             // top
             FileChooser fileChooser = new FileChooser(); 
             Desktop desktop = Desktop.getDesktop();
-            Label topLabel = new Label("Welcome to Quiz Generator");//top of screen
+            Label topLabel = new Label("Welcome to Quiz Generator");
             topLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 20));
             BorderPane root = new BorderPane();
             root.setTop(topLabel);
@@ -91,32 +87,31 @@ public class Main extends Application {
             VBox leftVB = new VBox();
             leftVB.setPadding(new Insets(10, 50, 50, 50));
             leftVB.setSpacing(10);
-            
+
             Label leftVBLabel =
                 new Label("Would you like to add a question, load file, or save the current file?");
             leftVBLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
             leftVB.getChildren().add(leftVBLabel);
-            //add a question
+
             Button btn1 = new Button();
             btn1.setText("Add a question");
             leftVB.getChildren().add(btn1);
             EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 {
-                	displayAddQuestionForm();//calls method to show new scene
+                	displayAddQuestionForm();
                 }
             };
          // when button is pressed 
             btn1.setOnAction(event1); 
 
-            //loading a json file
             Button btn2 = new Button();
             btn2.setText("Load a json file");
             leftVB.getChildren().add(btn2);
             EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 {
-                	//get file
+                	
                 	File file = fileChooser.showOpenDialog(primaryStage);
                 	String output = "file path";
                 	StringBuffer stringBuffer = new StringBuffer();
@@ -142,7 +137,7 @@ public class Main extends Application {
                 	VBox jsonBox = new VBox();
                 	Label newJson = new Label();
                 	newJson.setText(stringBuffer.toString());
-                	//button to go back to main page
+
                 	jsonBox.getChildren().add(newJson);
                 	Button backBtn = new Button();
                     backBtn.setText("Back to Main Page");
@@ -163,45 +158,17 @@ public class Main extends Application {
             };
          // when button is pressed 
             btn2.setOnAction(event2); 
-            //save to a json file
+
             Button btn3 = new Button();
             btn3.setText("Save the current questions to a json file");
             leftVB.getChildren().add(btn3);
             EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 {
-                	//file name
                 	VBox questionBox = new VBox();
                 	Label newQuestion = new Label();
-                	newQuestion.setText("Enter the file name: ");
+                	newQuestion.setText("Enter the question");
                 	questionBox.getChildren().add(newQuestion);
-                	TextField fileName = new TextField();
-                	questionBox.getChildren().add(fileName);
-                	
-                	//button to save
-                	Button jsonButton = new Button();
-                	jsonButton.setText("Save to file");
-                	questionBox.getChildren().add(jsonButton);
-                	 jsonButton.setOnAction(new EventHandler<ActionEvent>() {
-                      	@Override
-                      	public void handle(ActionEvent event) {
-                      	File f = new File(fileName.getText());//get text for file name
-                      	saveToJson(f);
-                      	}	
-                     });
-                	 //back to main page
-                	 Button backBtn = new Button();
-                     backBtn.setText("Back to Main Page");
-                     questionBox.getChildren().add(backBtn);
-                     backBtn.setOnAction(new EventHandler<ActionEvent>() {
-                     	@Override
-                     	public void handle(ActionEvent event) {
-                     		primaryStage.setScene(scene);
-                     		primaryStage.setFullScreen(true);
-                             primaryStage.show();
-                     	}
-                     		
-                    });
                 	Scene questionScene = new Scene(questionBox, 400, 400);                	
                 	primaryStage.setScene(questionScene);
                     primaryStage.show();
@@ -216,13 +183,11 @@ public class Main extends Application {
             VBox rightVB = new VBox();
             rightVB.setPadding(new Insets(10, 50, 50, 50));
             rightVB.setSpacing(10);
-           
-            //user settings
+
             Label rightVBLabel = new Label("User Settings");
             rightVBLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
             rightVB.getChildren().add(rightVBLabel);
-            
-            //number of questions
+
             Label numQLabel = new Label("Enter the number of questions you would like to answer:");
             Button button = new Button("Submit");
             TextField text = new TextField();
@@ -237,8 +202,7 @@ public class Main extends Application {
             hb.getChildren().addAll(numQLabel, text, button);
             hb.setSpacing(10);
             rightVB.getChildren().addAll(hb);
-            
-            //topics
+
             Label topicLabel = new Label("Topics:");
             Button updateButton = new Button("Update Topics");
             ComboBox<String> topicBox = new ComboBox<String>(
@@ -263,8 +227,7 @@ public class Main extends Application {
             VBox centerVB = new VBox();
             centerVB.setPadding(new Insets(10, 50, 50, 50));
             centerVB.setSpacing(10);
-            
-            //starting the quiz
+
             Label centerLabel = new Label("Press Start to begin the quiz");
             centerLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
 
@@ -285,73 +248,70 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-    
-    private void saveToJson(File f) {
-    	//saves the questions to file f
-    	this.questionDB.saveQuestionsToJSON(f);
-    }
+
     private void displayAddQuestionForm() {
 //    	sceneAddFormNode
-    	AddQuestionFormNode addQuestionFormNode = new AddQuestionFormNode();//set each new question
-    	VBox questionBox = addQuestionFormNode.getNode();//set Vbox
+    	AddQuestionFormNode addQuestionFormNode = new AddQuestionFormNode();
+    	VBox questionBox = addQuestionFormNode.getNode();
     	
-    	Label numQLabel = new Label("Enter your question: ");//label 
-        TextField textField = new TextField();//making text box for question
-        textField.setPrefWidth(300);//text width
-        HBox hb = new HBox();//horizontally
-        hb.getChildren().addAll(numQLabel, textField);//connect text field to Hbox 
-        hb.setSpacing(29);//space between label and text field
-        questionBox.getChildren().addAll(hb);//connect text field to question box 
+    	Label numQLabel = new Label("Enter your question: ");
+        TextField textField = new TextField();
+        textField.setPrefWidth(300);
+        HBox hb = new HBox();
+        hb.getChildren().addAll(numQLabel, textField);
+        hb.setSpacing(29);
+        questionBox.getChildren().addAll(hb);
         
         //metadata
-        Label metaLabel = new Label("Enter your Metadata:");//label
-        TextField textField2 = new TextField();//making text box for metadata
-        textField2.setPrefWidth(300);//text width
-        HBox hb2 = new HBox();//horizontally
-        hb2.getChildren().addAll(metaLabel, textField2);//connect text field to Hbox 
-        hb2.setSpacing(28);//space between label and text field
-        questionBox.getChildren().addAll(hb2);//connect text field to question box 
-        
+        Label metaLabel = new Label("Enter your Metadata:");
+        TextField textField2 = new TextField();
+        textField2.setPrefWidth(300);
+        HBox hb2 = new HBox();
+        hb2.getChildren().addAll(metaLabel, textField2);
+        hb2.setSpacing(28);
+        questionBox.getChildren().addAll(hb2);
+
         //topic
-        Label topicLabel = new Label("Enter your topic:");//label
-        TextField textField3 = new TextField();//making text box for metadata
-        textField3.setPrefWidth(300);//text width
-        HBox hb3 = new HBox();//horizontally
-        hb3.getChildren().addAll(topicLabel, textField3);//connect text field to Hbox
-        hb3.setSpacing(58);//space between label and text field
-        questionBox.getChildren().addAll(hb3);//connect text field to question box 
+        Label topicLabel = new Label("Enter your topic:");
+        TextField textField3 = new TextField();
+        textField3.setPrefWidth(300);
+        HBox hb3 = new HBox();
+        hb3.getChildren().addAll(topicLabel, textField3);
+        hb3.setSpacing(58);
+        questionBox.getChildren().addAll(hb3);
+
         //image
-        FileChooser f = new FileChooser();//making file chooser
-        Button browse = new Button("Browse Image File");//making browse file button
-        browse.setOnAction((event) ->//defining event for browse button
+        FileChooser f = new FileChooser();
+        Button browse = new Button("Browse Image File");
+        browse.setOnAction((event) ->
         {
         	File file = f.showOpenDialog(primaryStage);
-        	Image img = new Image(file.toURI().toString());//getting and loading the image
+        	Image img = new Image(file.toURI().toString());
         	ImageView mv = new ImageView(img);
         	mv.setImage(img);
         });
-        questionBox.getChildren().addAll(browse);//set the browse button to question box
+        questionBox.getChildren().addAll(browse);
         
-        //adding choice1        
-        Label choice1Label = new Label("Choice1:");//label
-        TextField textField5 = new TextField();//making text box for choice
-        textField5.setPrefWidth(300);//text width
-        HBox hb5 = new HBox();//horizontally
-        hb5.getChildren().addAll(choice1Label, textField5);//connect text field to Hbox
-        hb5.setSpacing(100);//space between label and text field
-        questionBox.getChildren().addAll(hb5);//connect text field to question box 
+        //adding choice1
+        Label choice1Label = new Label("Choice1:");
+        TextField textField5 = new TextField();
+        textField5.setPrefWidth(300);
+        HBox hb5 = new HBox();
+        hb5.getChildren().addAll(choice1Label, textField5);
+        hb5.setSpacing(100);
+        questionBox.getChildren().addAll(hb5);
         
-        // create radiobuttons for true or false choices
+        // create radiobuttons
         VBox r = new VBox(); 
         RadioButton r1 = new RadioButton("True"); 
         RadioButton r2 = new RadioButton("False"); 
         ToggleGroup tg = new ToggleGroup(); 
         
-        r1.setToggleGroup(tg);//set the tags for true and false 
+        r1.setToggleGroup(tg); 
         r2.setToggleGroup(tg);
-        r.getChildren().addAll(r1, r2);//set the buttons to r
+        r.getChildren().addAll(r1, r2);
         
-        questionBox.getChildren().addAll(r);//connect r to question box
+        questionBox.getChildren().addAll(r);
 
 
         
@@ -444,6 +404,18 @@ public class Main extends Application {
         	@Override
         	public void handle(ActionEvent event) {
         		
+        		String newMetadata = addQuestionFormNode.getMetadata().toString();
+        		String newQuestion = addQuestionFormNode.getQuestion().toString();
+        		String newTopic = addQuestionFormNode.getTopic().toString();
+        		String newImage = addQuestionFormNode.getImage().toString();
+        		List<String> newChoices = addQuestionFormNode.getChoiceTexts();
+        		
+        		for(int i; i<addQuestionFormNode.getChoiceTexts().size();i++) {
+        			newChoices.add(new Choice(addQuestionFormNode.getChoiceGroups().get(i), newChoices.get(i)));
+        		}
+
+        		for (ToggleGroup toggleGroup:addQuestionFormNode.getChoiceGroups())
+        		String newAnswer = addQuestionFormNode.getChoiceGroups();
         		
         		
 //        		1. Here, get all the text from the respective textfields like question test, choices
@@ -451,8 +423,10 @@ public class Main extends Application {
 //        		2. Create a new Question object
 //        		3. add the question object to the QuestionDatabase
         		//Scene backScene = new Scene(root, 400, 400);    
-//        		Question
+
+        		Question question = new Question( newMetadata, newQuestion, newTopic,newImage, newChoices, newAnswer);
         		
+        		questionDB.addQuestion(newTopic, question);
         	}
         });
         //back button
@@ -482,8 +456,8 @@ public class Main extends Application {
 //        5. Add Question object to QuestionDatabase
 //        6. At the end we need a button to go back to the main page
         
-        questionScene = new Scene(questionBox, 600, 800);//set the size for question window              
-    	primaryStage.setScene(questionScene);//connect the question page to primary stage
+        questionScene = new Scene(questionBox, 600, 800);               
+    	primaryStage.setScene(questionScene);
         primaryStage.show();
    }
     
@@ -663,157 +637,71 @@ public class Main extends Application {
         s.show();
     }
 
-    		/**
+    	/** 
 	 * When the user exits the program: 
-	 * Ask the user for a file name to save all questions to a json file.   
-	 *
+	 * Ask the user for a file name to save all questions to a json file.   ******help
+	 */
+	private void ending() {
+
+	}
+
+	/**
 	 * Provide two buttons on the form:  Save, or Exit without Save.
 	 * Show an alert confirming their choice and providing a goodbye message. 
 	 */
 	private void ending_helper() { // this method was not stated on the TA's Draft
 		Stage s = new Stage();
-		TilePane mainTilePane = new TilePane(); 
-		TextFlow textFlow = new TextFlow();
+		s.setTitle("Are you Not Saving?"); 
 
-		// SAVE BUTTON
-		Button save = new Button("Save"); 
-		create_save_button(s,save); // create
+		//1. SAVE 
+		Button save = new Button("save"); 
 
+		// create a tile pane 
+		TilePane r = new TilePane(); 
+		Alert a = new Alert(AlertType.NONE);  // ALERT
 
 		// inner class action event 
-		EventHandler<ActionEvent> last = new EventHandler<ActionEvent>() { 
-			public void handle(ActionEvent e) { 
-				have_A_great_day(s,textFlow); // good-bye message
+		EventHandler<ActionEvent> event = new 
+				EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent e) 
+			{ 
+				a.setAlertType(AlertType.CONFIRMATION); // type
+				a.setContentText("You file have been saved! Have a great day!"); 
+				a.show(); 
 			} 
 		}; 
-
-		// Saving File
-		EventHandler<ActionEvent> browser = new EventHandler<ActionEvent>() { 
-			public void handle(ActionEvent e) { 
-				BorderPane root = new BorderPane();
-
-				File selectedFile = choose_file(root,s);
-
-				TextFlow textFlow2 = new TextFlow();
-				have_A_great_day(s,textFlow2);
-			}
-		};
-
-		save.setOnAction(browser);
-
 
 		//2. "Exit without Save" button
 		Button Exit_Button = new Button();
 		Exit_Button.setText("Exit without Save");
 
-		EventHandler<ActionEvent> no_save_button = new EventHandler<ActionEvent>() { 
-			public void handle(ActionEvent e) { 
-				TextFlow textFlow3 = new TextFlow();
-				have_A_great_day(s,textFlow3);
-				Scene greatday = new Scene(textFlow3, 100, 100);
-								
-				s.setScene(greatday);
-				s.show();
+		Alert alert2 = new Alert(AlertType.NONE);
+
+		//inner class event handler
+		EventHandler<ActionEvent> confirm = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				//alert type
+				alert2.setAlertType(AlertType.CONFIRMATION);
+				alert2.setContentText("Are you sure that you want to exit without saving? Have a great day!");
+				alert2.show();
 			}
 		};
-		// if exit button --> no_save_button method
-		Exit_Button.setOnAction(no_save_button);
 
-		// 1. Main Buttons
-		mainTilePane.getChildren().add(save); 
-		mainTilePane.getChildren().add(Exit_Button);
+		// when button is pressed 
+		save.setOnAction(event); 
+		Exit_Button.setOnAction(confirm);
 
-		// 2. Save or No Save 
-		save.setOnAction(browser); 	// save -> choose file -> last
-		Exit_Button.setOnAction(last); // exit_no_save -> confirmation -> last
+		// add button 
+		r.getChildren().add(save); 
+		r.getChildren().add(Exit_Button);
 
-		Scene sc = new Scene(mainTilePane, 100, 100); 		// create a scene 
+		// create a scene 
+		Scene sc = new Scene(r, 100, 100); 
 
 		// set the scene 
 		s.setScene(sc); 
 		s.show();
 	}
-
-
-	/**
-	 * Method that makes "Save" button and displays
-	 * @param s
-	 * @param save
-	 * @return save button
-	 */
-	private Button create_save_button(Stage s, Button save) {
-		//1. SAVE 
-		save = new Button("Save"); 
-
-		// if clicked save -> go to file chooser
-		save.setOnAction(actionEvent -> {
-			FileChooser chooser = new FileChooser();
-			File selectedFile = chooser.showOpenDialog(s); // where to save
-
-			if (selectedFile != null) { 
-				questionDB.saveQuestionsToJSON(selectedFile); //save file method
-			}
-		});
-		return save;
-	}
-
-
-	/**
-	 * Goodbye message that will be shown to the user right before they leave
-	 * @param s
-	 * @param textFlow
-	 * @return
-	 */
-	private TextFlow have_A_great_day(Stage s, TextFlow textFlow) {
-		textFlow.setLayoutX(40);
-		textFlow.setLayoutY(40);
-
-		Text greatday = new Text("Have a great day!    "); // written
-		greatday.setFont(Font.font("Verdana",20));
-		//Exit --> shutdown
-		Button exit = new Button();
-		exit.setText("EXIT");
-
-		EventHandler<ActionEvent> shutdown = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				Platform.exit();
-			}
-		};
-		//display
-		textFlow.getChildren().add(greatday);
-		textFlow.getChildren().add(exit);
-
-		exit.setOnAction(shutdown); //when clicked shut down everything
-		
-		Scene scene = new Scene(textFlow, 400,100);
-		s.setScene(scene);
-		
-		return textFlow;
-	}
-
-
-	/**
-	 * choose file location that you want to save
-	 * @param root
-	 * @param s
-	 * @return
-	 */
-	private File choose_file(BorderPane root,Stage s) {
-		Stage Stage = new Stage();
-		FileChooser fileChooser = new FileChooser(); //create
-		Stage.setTitle("JavaFX App");
-
-		//select file folder
-		File selectedFile = fileChooser.showOpenDialog(Stage);
-
-		fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("Text Files", "*.txt")
-				,new FileChooser.ExtensionFilter("HTML Files", "*.htm")
-				);
-
-		return selectedFile;
-	}
-
 
     /**
 	 * main method executing Main class 

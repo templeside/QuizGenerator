@@ -6,10 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 
-import javax.swing.event.ChangeListener;
-
 import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,16 +15,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,6 +35,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+
 
 
 public class Main extends Application {
@@ -70,12 +67,13 @@ public class Main extends Application {
         	numIncorrect = 0;
             primaryStage.setFullScreen(true);
 		
-		//for closing	
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		public void handle(WindowEvent we) {
-			ending_helper();
-		}
-		});
+			//for closing		
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					ending_helper();
+				}
+			});
+
             // top
             FileChooser fileChooser = new FileChooser(); 
             Desktop desktop = Desktop.getDesktop();
@@ -767,7 +765,6 @@ public class Main extends Application {
 	 * @return
 	 */
 	private TextFlow have_A_great_day(Stage s, TextFlow textFlow) {
-		System.out.println("in here");
 		textFlow.setLayoutX(40);
 		textFlow.setLayoutY(40);
 

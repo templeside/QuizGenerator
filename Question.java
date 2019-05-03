@@ -41,12 +41,12 @@ public class Question {
 	private List<Choice> choices;//choices of the question
 	private String answer;//correct choice
 
+
 	/**
 	 *This is the constructor for the class.
 	 */
 	public Question(String newMetadata, String newQuestion, String newTopic, String newImage,
 			List<Choice> newChoices, String newAnswer) {
-		//initialize all variables
 		this.metadata = newMetadata;
 		this.question = newQuestion;
 		this.topic = newTopic;

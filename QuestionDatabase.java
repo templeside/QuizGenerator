@@ -101,7 +101,6 @@ public class QuestionDatabase implements QuestionDatabaseADT {
 	 *@param file is the file that the questions are saved to.
 	 */
 	public void saveQuestionsToJSON(File file) {
-
 		FileWriter f; // "topics" file
 		JSONObject obj = new JSONObject();
 
@@ -127,6 +126,7 @@ public class QuestionDatabase implements QuestionDatabaseADT {
 		}
 	}
 
+
 	/**
 	 *This method returns a list of Questions given their topic.
 	 *@param topic is the topic of the Questions
@@ -146,20 +146,13 @@ public class QuestionDatabase implements QuestionDatabaseADT {
         Object obj;
 
         try {
-        	
             obj = new JSONParser().parse(new FileReader(file));
-            
             JSONObject jo = (JSONObject) obj;
-            
-            System.out.println("jo is "+jo);
             JSONArray questionArr = (JSONArray) jo.get("questionArray");
-            System.out.println("questionArr is "+questionArr);
-            
             List<Choice> choiceList = new ArrayList<Choice>();
             List<Question> questionList = new ArrayList<Question>();
             Choice corrChoice = null;
 
-            System.out.println("questionArr is "+questionArr);
             for (int i = 0; i < questionArr.size(); i++) {
                 JSONObject qo = (JSONObject) questionArr.get(i);
                 String metadata = (String) qo.get("meta-data");
@@ -195,7 +188,7 @@ public class QuestionDatabase implements QuestionDatabaseADT {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }	
+    }
     /**
 	 *@return an ObservableList of the topics
 	 */

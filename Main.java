@@ -549,7 +549,7 @@ private void displayQuiz(String topic) {
       if(qn.getChoices().equals(qn.getNode().getUserData())) { //TA
          String family = "Helvetica";
          double size = 50;
-
+         //will display if user gets answer correct
          TextFlow textFlow = new TextFlow();
          textFlow.setLayoutX(40);
          textFlow.setLayoutY(40);
@@ -568,7 +568,7 @@ private void displayQuiz(String topic) {
       else {
          String family = "Helvetica";
          double size = 50;
-
+         //will display if user is incorrect
          TextFlow textFlow = new TextFlow();
          textFlow.setLayoutX(40);
          textFlow.setLayoutY(40);
@@ -577,7 +577,7 @@ private void displayQuiz(String topic) {
          text1.setFill(Color.RED);
 
          textFlow.getChildren().addAll(text1);
-
+         //shows what the user chose
          Group group = new Group(textFlow);
          Scene scene = new Scene(group, 350, 150, Color.WHITE);
          s.setTitle("Your Answer is");

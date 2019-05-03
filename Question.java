@@ -34,18 +34,19 @@ import java.util.List;
  *This is the Question class.
  */
 public class Question {
-	private String metadata;
-	private String question;
-	private String topic;
-	private String image;
-	private List<Choice> choices;
-	private String answer;
+	private String metadata;//metadata for the question
+	private String question;//the typed question
+	private String topic;//topic of the question
+	private String image;//image with the question
+	private List<Choice> choices;//choices of the question
+	private String answer;//correct choice
 
 	/**
 	 *This is the constructor for the class.
 	 */
 	public Question(String newMetadata, String newQuestion, String newTopic, String newImage,
 			List<Choice> newChoices, String newAnswer) {
+		//initialize all variables
 		this.metadata = newMetadata;
 		this.question = newQuestion;
 		this.topic = newTopic;

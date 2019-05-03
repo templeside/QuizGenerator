@@ -165,24 +165,52 @@ public class Main extends Application {
          // when button is pressed 
             btn2.setOnAction(event2); 
 
+            //save to a json file
             Button btn3 = new Button();
             btn3.setText("Save the current questions to a json file");
             leftVB.getChildren().add(btn3);
             EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() { 
                 public void handle(ActionEvent e) 
                 {
-                   VBox questionBox = new VBox();
-                   Label newQuestion = new Label();
-                   newQuestion.setText("Enter the question");
-                   questionBox.getChildren().add(newQuestion);
-                   Scene questionScene = new Scene(questionBox, 400, 400);                   
-                   primaryStage.setScene(questionScene);
+                	//file name
+                	VBox questionBox = new VBox();
+                	Label newQuestion = new Label();
+                	newQuestion.setText("Enter the file name: ");
+                	questionBox.getChildren().add(newQuestion);
+                	TextField fileName = new TextField();
+                	questionBox.getChildren().add(fileName);
+                	
+                	//button to save
+                	Button jsonButton = new Button();
+                	jsonButton.setText("Save to file");
+                	questionBox.getChildren().add(jsonButton);
+                	 jsonButton.setOnAction(new EventHandler<ActionEvent>() {
+                      	@Override
+                      	public void handle(ActionEvent event) {
+                      	File f = new File(fileName.getText());//get text for file name
+                      	saveToJson(f);
+                      	}	
+                     });
+                	 //back to main page
+                	 Button backBtn = new Button();
+                     backBtn.setText("Back to Main Page");
+                     questionBox.getChildren().add(backBtn);
+                     backBtn.setOnAction(new EventHandler<ActionEvent>() {
+                     	@Override
+                     	public void handle(ActionEvent event) {
+                     		primaryStage.setScene(scene);
+                     		primaryStage.setFullScreen(true);
+                             primaryStage.show();
+                     	}
+                     		
+                    });
+                	Scene questionScene = new Scene(questionBox, 400, 400);                	
+                	primaryStage.setScene(questionScene);
                     primaryStage.show();
                }
             };
          // when button is pressed 
             btn3.setOnAction(event3); 
-
             root.setLeft(leftVB);
 
             // right
@@ -271,6 +299,11 @@ public class Main extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    private void saveToJson(File f) {
+    	//saves the questions to file f
+    	this.questionDB.saveQuestionsToJSON(f);
     }
 
     private void displayAddQuestionForm() {

@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.event.ChangeListener;
@@ -296,17 +297,12 @@ public class Main extends Application {
         questionBox.getChildren().addAll(hb3);
 
         //image
-        //고쳐야 한다 나는 image 모르니까 니들이 알아서 해라
-        FileChooser f = new FileChooser();
-        Button browse = new Button("Browse Image File");
-        browse.setOnAction((event) ->
-        {
-           File file = f.showOpenDialog(primaryStage);
-           Image img = new Image(file.toURI().toString());
-           ImageView mv = new ImageView(img);
-           mv.setImage(img);
-        });
-        questionBox.getChildren().addAll(browse);
+        Label imageLabel = new Label("Enter Image File name:");
+        TextField textField4 = new TextField();
+        HBox hb4 = new HBox();
+        hb4.getChildren().addAll(imageLabel, textField4);
+        hb4.setSpacing(10);
+        questionBox.getChildren().addAll(hb4);
         
         addChoiceHboxAndRadioBox(questionBox);
         
@@ -321,11 +317,14 @@ public class Main extends Application {
         		   System.out.println("index is "+i + "and children is "+questionBox.getChildren().get(i));
         	   }
         	   
-              String newMetadata =  addQuestionFormNode.getMetadata();
-              String newQuestion =  addQuestionFormNode.getQuestion();
-              String newTopic =  addQuestionFormNode.getTopic();
-              String newImage = addQuestionFormNode.getImage();
-              List<Choice> newChoices = addQuestionFormNode.getChoiceTexts();
+              String newMetadata =  addQuestionFormNode.getMetadata().getText();
+              String newQuestion =  addQuestionFormNode.getQuestion().getText();
+              String newTopic =  addQuestionFormNode.getTopic().getText();
+              String newImage = addQuestionFormNode.getImage().getText();
+              List<Choice> newChoices = new ArrayList<Choice>();
+              for(int i = 0; i < addQuestionFormNode.getChoiceGroups().size(); i++) {
+            	  newChoices.add(new Choice(addQuestionFormNode.getChoiceGroups().get(i), addQuestionFormNode.getChoiceTexts().get(i)));
+              }
               String answer = "";
               
               for(int i=0;i<newChoices.size();i++) {

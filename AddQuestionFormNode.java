@@ -37,6 +37,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -45,45 +46,64 @@ import javafx.scene.layout.VBox;
 
 public class AddQuestionFormNode {
     
-    private List<String> choiceTexts;
+    private List<Choice> choiceTexts;
     private List<Boolean> choiceGroups;
     private VBox form;
     
     public AddQuestionFormNode() {       
-        choiceTexts = new ArrayList<String>();
+        choiceTexts = new ArrayList<Choice>();
         choiceGroups = new ArrayList<Boolean>();
         form = new VBox();
     }
     
-    public TextField getQuestion() {
-        return (TextField) form.getChildren().get(0);
-               
+    public String getQuestion() {
+    	return ((HBox)form.getChildren().get(0)).getChildren().get(1).toString();               
     }
     
-    public TextField getMetadata() {
+    public String getMetadata() {
     	
-        return (TextField) form.getChildren().get(1);
-        
+        return ((HBox)form.getChildren().get(1)).getChildren().get(1).toString();
     }    
 
     
-    public TextField getTopic() {
-    	return (TextField) form.getChildren().get(2);
-        
+    public String getTopic() {
+    	return ((HBox)form.getChildren().get(2)).getChildren().get(1).toString();        
     }
 
-    public TextField getImage() {
-        return (TextField) form.getChildren().get(3);
-        
+    public String getImage() {
+    	return form.getChildren().get(3).toString();        
     }
     
-    public List<String> getChoiceTexts() {    	
+    public List<Choice> getChoiceTexts() {    	
+    	
+        //textfield5가 들어있는곳.
+        //hb5는 hbox이다
+//        hb5.getChildren().addAll(choice1Label, textField5);
+//        questionBox.getChildren().addAll(hb5);
+        
+        // create radiobuttons
+//        VBox r = new VBox(); 
+//        RadioButton r1 = new RadioButton("True"); 
+//        RadioButton r2 = new RadioButton("False"); 
+//        ToggleGroup tg = new ToggleGroup(); 
+//        
+//        r1.setToggleGroup(tg); 
+//        r2.setToggleGroup(tg);
+//        r.getChildren().addAll(r1, r2);
+//        
+//        questionBox.getChildren().addAll(r);
+        
     	int i;
-    	for(i = 4;i<=19;i = i+3) {
-    	HBox hb = (HBox) form.getChildren().get(i);
-    	choiceTexts.add((String)(hb.getChildren().get(1)).toString());
+    	for(i = 0;i<5;i++) {
+    	HBox hb = (HBox) form.getChildren().get((i*2)+4);
+    	
+    	
+    	
+    	Choice choice = new Choice(this.getChoiceGroups().get(i),hb.getChildren().get(1).toString());
+    	choiceTexts.add(choice);
     	}
         return choiceTexts;
+        
         
     }
     
@@ -93,8 +113,10 @@ public class AddQuestionFormNode {
     }
     
     public List<Boolean> getChoiceGroups() {
-    	for(int i = 5;i<=19;i = i+3) {
-        	RadioButton radioTrue =  (RadioButton) form.getChildren().get(i);
+    	for(int i = 0;i<5;i++) {
+    		VBox newbox = ((VBox)form.getChildren().get((i*2)+5));
+    		
+        	RadioButton radioTrue =  (RadioButton)newbox.getChildren().get(0);
         	choiceGroups.add(radioTrue.isSelected());     
     	}
     	return choiceGroups;

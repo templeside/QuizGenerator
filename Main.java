@@ -69,7 +69,13 @@ public class Main extends Application {
         	totalNumQuestions = 0;
         	numIncorrect = 0;
             primaryStage.setFullScreen(true);
-
+		
+		//for closing	
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		public void handle(WindowEvent we) {
+			ending_helper();
+		}
+		});
             // top
             FileChooser fileChooser = new FileChooser(); 
             Desktop desktop = Desktop.getDesktop();

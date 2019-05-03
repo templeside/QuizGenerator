@@ -197,13 +197,22 @@ public class Main extends Application {
             Label numQLabel = new Label("Enter the number of questions you would like to answer:");
             Button button = new Button("Submit");
             TextField text = new TextField();
+					
+            // when Submit pressed : #Questions input from the user
             button.setOnAction(e -> {
+	    try{
                 if (Integer.parseInt(text.getText()) > this.totalNumQuestions) {
                     this.totalNumQuestions = questionDB.getNumQuestions();
                 } else {
                     this.totalNumQuestions = Integer.parseInt(text.getText());
                 }
+	    } catch(Exception NumberFormatException){ // Warning: put appropriate input for the #Questions that the user typed in
+	            Alert alert = new Alert(AlertType.WARNING);
+		    alert.setContentText("Please type in appropriate input");
+	            alert.show(); // show this dialog	
+	    }    
             });
+		
             HBox hb = new HBox();
             hb.getChildren().addAll(numQLabel, text, button);
             hb.setSpacing(10);

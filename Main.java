@@ -640,70 +640,155 @@ public class Main extends Application {
         s.show();
     }
 
-    	/** 
-	 * When the user exits the program: 
-	 * Ask the user for a file name to save all questions to a json file.   ******help
-	 */
-	private void ending() {
-
-	}
-
 	/**
+	 * When the user exits the program: 
+	 * Ask the user for a file name to save all questions to a json file.   
+	 *
 	 * Provide two buttons on the form:  Save, or Exit without Save.
 	 * Show an alert confirming their choice and providing a goodbye message. 
 	 */
 	private void ending_helper() { // this method was not stated on the TA's Draft
 		Stage s = new Stage();
-		s.setTitle("Are you Not Saving?"); 
+		TilePane mainTilePane = new TilePane(); 
+		TextFlow textFlow = new TextFlow();
 
-		//1. SAVE 
-		Button save = new Button("save"); 
+		// SAVE BUTTON
+		Button save = new Button("Save"); 
+		create_save_button(s,save); // create
 
-		// create a tile pane 
-		TilePane r = new TilePane(); 
-		Alert a = new Alert(AlertType.NONE);  // ALERT
 
 		// inner class action event 
-		EventHandler<ActionEvent> event = new 
-				EventHandler<ActionEvent>() { 
-			public void handle(ActionEvent e) 
-			{ 
-				a.setAlertType(AlertType.CONFIRMATION); // type
-				a.setContentText("You file have been saved! Have a great day!"); 
-				a.show(); 
+		EventHandler<ActionEvent> last = new EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent e) { 
+				have_A_great_day(s,textFlow); // good-bye message
 			} 
 		}; 
+
+		// Saving File
+		EventHandler<ActionEvent> browser = new EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent e) { 
+				BorderPane root = new BorderPane();
+
+				File selectedFile = choose_file(root,s);
+
+				TextFlow textFlow2 = new TextFlow();
+				have_A_great_day(s,textFlow2);
+			}
+		};
+
+		save.setOnAction(browser);
+
 
 		//2. "Exit without Save" button
 		Button Exit_Button = new Button();
 		Exit_Button.setText("Exit without Save");
 
-		Alert alert2 = new Alert(AlertType.NONE);
+		EventHandler<ActionEvent> no_save_button = new EventHandler<ActionEvent>() { 
+			public void handle(ActionEvent e) { 
+				TextFlow textFlow3 = new TextFlow();
+				have_A_great_day(s,textFlow3);
+				Scene greatday = new Scene(textFlow3, 100, 100);
 
-		//inner class event handler
-		EventHandler<ActionEvent> confirm = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				//alert type
-				alert2.setAlertType(AlertType.CONFIRMATION);
-				alert2.setContentText("Are you sure that you want to exit without saving? Have a great day!");
-				alert2.show();
+				s.setScene(greatday);
+				s.show();
 			}
 		};
+		// if exit button --> no_save_button method
+		Exit_Button.setOnAction(no_save_button);
 
-		// when button is pressed 
-		save.setOnAction(event); 
-		Exit_Button.setOnAction(confirm);
+		// 1. Main Buttons
+		mainTilePane.getChildren().add(save); 
+		mainTilePane.getChildren().add(Exit_Button);
 
-		// add button 
-		r.getChildren().add(save); 
-		r.getChildren().add(Exit_Button);
+		// 2. Save or No Save 
+		save.setOnAction(browser); 	// save -> choose file -> last
+		Exit_Button.setOnAction(last); // exit_no_save -> confirmation -> last
 
-		// create a scene 
-		Scene sc = new Scene(r, 100, 100); 
+		Scene sc = new Scene(mainTilePane, 100, 100); 		// create a scene 
 
 		// set the scene 
 		s.setScene(sc); 
 		s.show();
+	}
+
+
+	/**
+	 * Method that makes "Save" button and displays
+	 * @param s
+	 * @param save
+	 * @return save button
+	 */
+	private Button create_save_button(Stage s, Button save) {
+		//1. SAVE 
+		save = new Button("Save"); 
+
+		// if clicked save -> go to file chooser
+		save.setOnAction(actionEvent -> {
+			FileChooser chooser = new FileChooser();
+			File selectedFile = chooser.showOpenDialog(s); // where to save
+
+			if (selectedFile != null) { 
+				questionDB.saveQuestionsToJSON(selectedFile); //save file method
+			}
+		});
+		return save;
+	}
+
+
+	/**
+	 * Goodbye message that will be shown to the user right before they leave
+	 * @param s
+	 * @param textFlow
+	 * @return
+	 */
+	private TextFlow have_A_great_day(Stage s, TextFlow textFlow) {
+		textFlow.setLayoutX(40);
+		textFlow.setLayoutY(40);
+
+		Text greatday = new Text("Have a great day!    "); // written
+		greatday.setFont(Font.font("Verdana",20));
+		//Exit --> shutdown
+		Button exit = new Button();
+		exit.setText("EXIT");
+
+		EventHandler<ActionEvent> shutdown = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				Platform.exit();
+			}
+		};
+		//display
+		textFlow.getChildren().add(greatday);
+		textFlow.getChildren().add(exit);
+
+		exit.setOnAction(shutdown); //when clicked shut down everything
+
+		Scene scene = new Scene(textFlow, 400,100);
+		s.setScene(scene);
+
+		return textFlow;
+	}
+
+
+	/**
+	 * choose file location that you want to save
+	 * @param root
+	 * @param s
+	 * @return
+	 */
+	private File choose_file(BorderPane root,Stage s) {
+		Stage Stage = new Stage();
+		FileChooser fileChooser = new FileChooser(); //create
+		Stage.setTitle("JavaFX App");
+
+		//select file folder
+		File selectedFile = fileChooser.showOpenDialog(Stage);
+
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("Text Files", "*.txt")
+				,new FileChooser.ExtensionFilter("HTML Files", "*.htm")
+				);
+
+		return selectedFile;
 	}
 
     /**

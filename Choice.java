@@ -34,8 +34,8 @@ package application;
  */
 public class Choice {
 	//fields
-	public boolean isCorrect;
-	public String choice;
+	public boolean isCorrect;//true if choice is correct, false if incorrect
+	public String choice;//the typed out choice
 
 	/**
 	 *This is the constructor for the class.

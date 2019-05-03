@@ -635,7 +635,7 @@ private void displayQuiz(String topic) {
          public void handle(ActionEvent e) { 
             TextFlow textFlow3 = new TextFlow();
             have_A_great_day(s,textFlow3);
-            Scene greatday = new Scene(textFlow3, 100, 100);
+            Scene greatday = new Scene(textFlow3, 400, 100);
 
             s.setScene(greatday);
             s.show();
@@ -652,7 +652,7 @@ private void displayQuiz(String topic) {
       save.setOnAction(browser);    // save -> choose file -> last
       Exit_Button.setOnAction(last); // exit_no_save -> confirmation -> last
 
-      Scene sc = new Scene(mainTilePane, 100, 100);       // create a scene 
+      Scene sc = new Scene(mainTilePane, 400, 100);       // create a scene 
 
       // set the scene 
       s.setScene(sc); 

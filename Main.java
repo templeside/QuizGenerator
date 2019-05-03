@@ -309,9 +309,10 @@ public class Main extends Application {
         //image
         Label imageLabel = new Label("Enter Image File name:");
         TextField textField4 = new TextField();//textfield for image path
+        textField4.setPrefWidth(300);
         HBox hb4 = new HBox();
         hb4.getChildren().addAll(imageLabel, textField4);//add label and textfield to hbox
-        hb4.setSpacing(10);//space between label and textfield
+        hb4.setSpacing(20);//space between label and textfield
         questionBox.getChildren().addAll(hb4);//connect hbox to questionBox
         
         addChoiceHboxAndRadioBox(questionBox);

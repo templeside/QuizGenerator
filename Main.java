@@ -128,6 +128,9 @@ public class Main extends Application {
                 			}
                 			                           
                 			fileReader.close();
+                			System.out.println("FILE is "+file);
+                			questionDB.loadQuestionsFromJSON(file);
+                			
                     	}
                     	catch(Exception ex)
                     	{

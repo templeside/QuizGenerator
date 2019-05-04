@@ -52,6 +52,7 @@ public class Main extends Application {
     private String topic;// topic of the quiz
     private ComboBox<String> grabTopic;// combobox of the topics available for quiz
     private Scene mainScene;
+    private int numInQList;
 
     Stage primaryStage;// Stage for the GUI
     Scene scene, questionScene;// scenes for home page, add new question, etc.
@@ -68,6 +69,7 @@ public class Main extends Application {
             currQuestionNum = 0;
             totalNumQuestions = 0;
             numIncorrect = 0;
+            numInQList = 0;
             primaryStage.setFullScreen(true);
 
             // top
@@ -494,14 +496,10 @@ public class Main extends Application {
 
     private void displayQuiz(String topic) {
 
-        currQuestionNum = 0;
         questions = questionDB.getQuestions(topic);
-        for (int i = 0; i < totalNumQuestions; i++) { // doesn't the #of Questions has to be chosen
-
-            this.currQuestion = questions.get(i);
+            this.currQuestion = questions.get(numInQList);
             this.currQuestionNum++;
             displayQuestion();
-        }
     }
 
     /**
@@ -551,13 +549,14 @@ public class Main extends Application {
 
         Button submit = new Button();
         submit.setText("Submit"); // IF SUBMIT THEN displaySubmit()
-        box.getChildren().add(submit);
-        root.setBottom(box);
+        box.getChildren().add(submit);     
 
         // Submit -> check answer
         submit.setOnAction(e -> {
             displaySubmit(((Labeled) group2.getSelectedToggle()).getText());
         });
+        
+        root.setBottom(box);
 
         Scene scene = new Scene(root, 400, 400);
         s.setScene(scene);
@@ -590,6 +589,14 @@ public class Main extends Application {
             text1.setFill(Color.GREEN);
 
             textFlow.getChildren().addAll(text1);
+            
+            
+            Button nextQuestion = new Button("Next Question");
+            textFlow.getChildren().add(nextQuestion);
+            nextQuestion.setOnAction(e -> {
+                displayQuiz(currQuestion.getTopic());
+            });
+            
 
             Group group = new Group(textFlow);
             Scene scene = new Scene(group, 350, 150, Color.WHITE);
@@ -613,6 +620,12 @@ public class Main extends Application {
             text1.setFill(Color.RED);
 
             textFlow.getChildren().addAll(text1);
+            
+            Button nextQuestion = new Button("Next Question");
+            textFlow.getChildren().add(nextQuestion);
+            nextQuestion.setOnAction(e -> {
+                displayQuiz(currQuestion.getTopic());
+            });
 
             // shows what the user chose
             Group group = new Group(textFlow);
@@ -671,6 +684,7 @@ public class Main extends Application {
                 primaryStage.show();
             }
         });
+
         centerVB.getChildren().add(backBtn);
 
         root.setCenter(centerVB);

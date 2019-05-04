@@ -95,27 +95,29 @@ public class QuestionDatabase implements QuestionDatabaseADT {
 	        return count;
 	    }
 
-
 	/**
 	 * This method saves all the questions from the "topics" (List of questions) into the json file 
 	 *@param file is the file that the questions are saved to.
 	 */
 	public void saveQuestionsToJSON(File file) {
 		
-		
+//		Map<String, List<Question>> topics;
+
 		FileWriter f; // "topics" file
 		JSONObject obj = new JSONObject();
-
+		
 		try { //CHECK THIS!!!!
 			f = new FileWriter(file);
-			for (int i=0; i<this.topics.size(); i++) {
+			
+			
+			for(Map.Entry<String, List<Question>> entry: this.topics.entrySet()) {
+				JSONArray array = new JSONArray();
 				
-				JSONArray list = new JSONArray();
-				for(int j=0; j<.size(); j++) {
-					
-					list.add(this.topics.get(this.topics.get(i).get(j)));
+				for(int i = 0; i < entry.getValue().size(); i++) {
+					array.add(makeEntryToString(entry));
 				}
-				obj.put(this.topics.get(i), list);
+				obj.put(entry.getKey(), array);
+				
 			}
 			f.write(obj.toJSONString());
 			f.close();
@@ -124,6 +126,46 @@ public class QuestionDatabase implements QuestionDatabaseADT {
 		}
 	}
 
+
+	private JSONArray makeEntryToString(Entry<String, List<Question>> entry) {
+		JSONArray arrayForQuestion = new JSONArray();
+		JSONArray arrayForChoiceList = new JSONArray();
+
+		JSONObject first = new JSONObject();
+		JSONObject properties = new JSONObject();
+		JSONObject questionArray = new JSONObject();
+		JSONObject items = new JSONObject();
+		JSONObject
+		
+		first.put("$schema", "");
+		first.put("title", "object");
+		first.put("properties", properties );
+		
+		properties.put("questionArray", "description");
+		description.put("description", "The array of questions");
+
+		array.add(entry.getKey());
+		
+		//question that i need extract sources
+		Question aQuestion = (Question)entry.getValue();
+		arrayForQuesetion.add(meta-data)
+		
+		arrayForQuestion.meta-data = aQuestion.getMetadata());
+		arrayForQuestion.add(aQuestion.getQuestion());
+		arrayForQuestion.add(aQuestion.getTopic());
+		arrayForQuestion.add(aQuestion.getImage());
+		arrayForQuestion.add(arrayForChoiceList);
+
+		//add choices by iterating.
+		List<Choice> choiceList = aQuestion.getChoices();
+		for(int j=0; j<choiceList.size();j++) {
+			arrayForChoiceList.add(choiceList.get(j).getChoice());
+		}
+		
+		
+		return array;
+		
+	}
 
 	/**
 	 *This method returns a list of Questions given their topic.

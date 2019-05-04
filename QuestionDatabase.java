@@ -69,15 +69,18 @@ public class QuestionDatabase implements QuestionDatabaseADT {
 	 * @param topic
 	 * @param q
 	 */
-	public void addQuestion(String topic, Question q) {
+	public void addQuestion(Question q) {
         List<Question> addQuestionList = new ArrayList<Question>();
         addQuestionList.add(q);
         if (topics.containsKey(q.getTopic())) {
-            topics.get(q.getTopic()).addAll(addQuestionList);
+            List<Question> tempQL = new ArrayList<Question>();
+            tempQL = topics.get(q.getTopic());
+            tempQL.add(q);
+            topics.replace(q.getTopic(), topics.get(q.getTopic()),
+                tempQL);
         } else {
-            topics.put(q.getTopic(), addQuestionList);
-        }
-
+            topics.putIfAbsent(q.getTopic(), addQuestionList);
+        }    
     }
 
 	/**
@@ -95,77 +98,37 @@ public class QuestionDatabase implements QuestionDatabaseADT {
 	        return count;
 	    }
 
+
 	/**
 	 * This method saves all the questions from the "topics" (List of questions) into the json file 
 	 *@param file is the file that the questions are saved to.
 	 */
 	public void saveQuestionsToJSON(File file) {
-		
-//		Map<String, List<Question>> topics;
-
 		FileWriter f; // "topics" file
 		JSONObject obj = new JSONObject();
-		
+
 		try { //CHECK THIS!!!!
 			f = new FileWriter(file);
-			
-			
-			for(Map.Entry<String, List<Question>> entry: this.topics.entrySet()) {
-				JSONArray array = new JSONArray();
-				
-				for(int i = 0; i < entry.getValue().size(); i++) {
-					array.add(makeEntryToString(entry));
+
+			//each topic = List
+			Iterator itr1 = ((List) f).iterator();
+
+			while(itr1.hasNext()) {
+				List q_List = (List) itr1.next();
+				JSONArray list = new JSONArray(); // list of questions
+
+				for(int i=0; i<q_List.size(); i++) { //add each question -> q_list
+					list.add(q_List.get(i));
 				}
-				obj.put(entry.getKey(), array);
-				
+				obj.put(q_List, list); // each topic into obj
 			}
-			f.write(obj.toJSONString());
-			f.close();
+			f.write(obj.toJSONString()); // write obj into a file
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-
-	private JSONArray makeEntryToString(Entry<String, List<Question>> entry) {
-		JSONArray arrayForQuestion = new JSONArray();
-		JSONArray arrayForChoiceList = new JSONArray();
-
-		JSONObject first = new JSONObject();
-		JSONObject properties = new JSONObject();
-		JSONObject questionArray = new JSONObject();
-		JSONObject items = new JSONObject();
-		JSONObject
-		
-		first.put("$schema", "");
-		first.put("title", "object");
-		first.put("properties", properties );
-		
-		properties.put("questionArray", "description");
-		description.put("description", "The array of questions");
-
-		array.add(entry.getKey());
-		
-		//question that i need extract sources
-		Question aQuestion = (Question)entry.getValue();
-		arrayForQuesetion.add(meta-data)
-		
-		arrayForQuestion.meta-data = aQuestion.getMetadata());
-		arrayForQuestion.add(aQuestion.getQuestion());
-		arrayForQuestion.add(aQuestion.getTopic());
-		arrayForQuestion.add(aQuestion.getImage());
-		arrayForQuestion.add(arrayForChoiceList);
-
-		//add choices by iterating.
-		List<Choice> choiceList = aQuestion.getChoices();
-		for(int j=0; j<choiceList.size();j++) {
-			arrayForChoiceList.add(choiceList.get(j).getChoice());
-		}
-		
-		
-		return array;
-		
-	}
 
 	/**
 	 *This method returns a list of Questions given their topic.
@@ -186,14 +149,16 @@ public class QuestionDatabase implements QuestionDatabaseADT {
         Object obj;
 
         try {
+
             obj = new JSONParser().parse(new FileReader(file));
             JSONObject jo = (JSONObject) obj;
             JSONArray questionArr = (JSONArray) jo.get("questionArray");
-            List<Choice> choiceList = new ArrayList<Choice>();
-            List<Question> questionList = new ArrayList<Question>();
             Choice corrChoice = null;
 
             for (int i = 0; i < questionArr.size(); i++) {
+                List<Question> questionList = new ArrayList<Question>();
+                List<Choice> choiceList = new ArrayList<Choice>();
+
                 JSONObject qo = (JSONObject) questionArr.get(i);
                 String metadata = (String) qo.get("meta-data");
                 String question = (String) qo.get("questionText");
@@ -217,13 +182,15 @@ public class QuestionDatabase implements QuestionDatabaseADT {
                     new Question(metadata, question, topic, image, choiceList, corrChoice.choice);
                 questionList.add(newQuestion);
                 if (topics.containsKey(newQuestion.getTopic())) {
-                    topics.get(newQuestion.getTopic()).addAll(questionList);
+                    List<Question> tempQL = new ArrayList<Question>();
+                    tempQL = topics.get(newQuestion.getTopic());
+                    tempQL.add(newQuestion);
+                    topics.replace(newQuestion.getTopic(), topics.get(newQuestion.getTopic()),
+                        tempQL);
                 } else {
-                    topics.put(newQuestion.getTopic(), questionList);
+                    topics.putIfAbsent(newQuestion.getTopic(), questionList);
                 }
-                choiceList.clear();
             }
-
         } catch (IOException | ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

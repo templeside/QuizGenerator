@@ -215,12 +215,6 @@ public class Main extends Application {
                         @Override
                         public void handle(ActionEvent event) {
                             File f = new File(fileName.getText());// get text for file name
-                            try {
-								f.createNewFile();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
                             saveToJson(f);
                         }
                     });

@@ -1,3 +1,32 @@
+//////////////////// ALL ASSIGNMENTS INCLUDE THIS SECTION ////////////////////////
+// Title:           ATEAM PROJECT                                               //
+// Files:           AddQuestionFormNode, Choice, Main, QuestionNode             //
+//                  Question, QuestionDatabase, QuestionDatabaseADT             //  
+// Course:          CS 400, Spring 2018                                         //
+// Author:          ATEAM106 (Andrew Lutkus, Chanwoong Jhon,                    //
+//                            Elaheh Jabbarifard, Chaiyeen Oh, Sara Haines)     //
+// Email:           alutkus@wisc.edu, cjhon@wisc.edu,                           //
+//                  jabbarifard@wisc.edu, coh26@wisc.edu, schaines@wisc.edu     //
+// Lecturer's Name: Andrew Kuemmel, Deb Deppeler                                //
+// Due Date : 5/2/2019 10pm                                                     //
+//                                                                              //
+// VERIFY THE FOLLOWING BY PLACING AN X NEXT TO EACH TRUE STATEMENT:            //
+//   _X_ Write-up states that pair programming is allowed for this assignment.  //
+//   _X_ We have both read and understand the course Pair Programming Policy.   //
+//   _X_ We have registered our team prior to the team registration deadline.   //
+//                                                                              //
+///////////////////////////// CREDIT OUTSIDE HELP ////////////////////////////////
+//                                                                              //
+// Students who get help from sources other than their partner must fully       //
+// acknowledge and credit those sources of help here.  Instructors and TAs do   //
+// not need to be credited here, but tutors, friends, relatives, room mates,    //
+// strangers, and others do.  If you received no outside help from either type  //
+//  of source, then please explicitly indicate NONE.                            //
+//                                                                              //
+// Persons:         X                                                           //
+// Online Sources:  X                                                           //
+//                                                                              //
+/////////////////////////////// 80 COLUMNS WIDE //////////////////////////////////
 package application;
 
 import java.awt.Desktop;
@@ -53,6 +82,9 @@ public class Main extends Application {
     private ComboBox<String> grabTopic;// combobox of the topics available for quiz
     private Scene mainScene;
     private int numInQList;
+    private Stage tempQuestionStage;
+    private Stage tempResultStage;
+    private Stage tempEndStage;
 
     Stage primaryStage;// Stage for the GUI
     Scene scene, questionScene;// scenes for home page, add new question, etc.
@@ -74,7 +106,6 @@ public class Main extends Application {
 
             // top
             FileChooser fileChooser = new FileChooser();
-            Desktop desktop = Desktop.getDesktop();
             Label topLabel = new Label("Welcome to Quiz Generator");
             topLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 20));
             BorderPane root = new BorderPane();
@@ -213,37 +244,38 @@ public class Main extends Application {
             VBox rightVB = new VBox();
             rightVB.setPadding(new Insets(10, 50, 50, 50));
             rightVB.setSpacing(10);
-
+            
             Label rightVBLabel = new Label("User Settings");
             rightVBLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
             rightVB.getChildren().add(rightVBLabel);
 
             Label numQLabel = new Label("Enter the number of questions you would like to answer:");
-            Button NumQuestionbutton= new Button("Submit");
+            Button NumQuestionbutton = new Button("Submit");
             TextField text = new TextField();
 
             // when Submit pressed : #Questions input from the user
             NumQuestionbutton.setOnAction(e -> {
                 this.topic = grabTopic.getValue();
                 this.totalNumQuestions = questionDB.getQuestions(this.topic).size();
-                
-                try { 
+
+                try {
                     if (Integer.parseInt(text.getText()) < 1) {
                         Alert alert = new Alert(AlertType.WARNING);
                         alert.setContentText("Number of questions needs to be greater than 0");
                         alert.show();
                     }
-                    
-                if (Integer.parseInt(text.getText()) < this.totalNumQuestions) {
-                    this.totalNumQuestions = Integer.parseInt(text.getText());
-                    System.out.println("totalNumQuestions after NumQuestionbutton is pressed22222"
-                        + totalNumQuestions);
 
-                } else {
-                    this.totalNumQuestions = questionDB.getQuestions(this.topic).size();
-                    System.out.println(
-                        "totalNumQuestions after NumQuestionbutton is pressed" + totalNumQuestions);
-                }
+                    if (Integer.parseInt(text.getText()) < this.totalNumQuestions) {
+                        this.totalNumQuestions = Integer.parseInt(text.getText());
+                        System.out
+                            .println("totalNumQuestions after NumQuestionbutton is pressed22222"
+                                + totalNumQuestions);
+
+                    } else {
+                        this.totalNumQuestions = questionDB.getQuestions(this.topic).size();
+                        System.out.println("totalNumQuestions after NumQuestionbutton is pressed"
+                            + totalNumQuestions);
+                    }
                 } catch (Exception e1) {
                     Alert alert = new Alert(AlertType.WARNING);
                     alert.setContentText("Please type in appropriate input");
@@ -296,10 +328,10 @@ public class Main extends Application {
                 this.topic = grabTopic.getValue();
                 displayQuiz(this.topic);
             });
-            
+
             helpButton.setOnAction(e -> {
                 Stage stage = new Stage();
-                
+
                 stage.setTitle("Instructions");
                 Text step1 = new Text();
                 Text step2 = new Text();
@@ -307,7 +339,8 @@ public class Main extends Application {
                 Text step4 = new Text();
                 step1.setText("1. Add Question or load from a json file");
                 step2.setText("2. Update Topics list and choose a topic");
-                step3.setText("3. Type the number of questions you would like to answer, must be greater than 0");
+                step3.setText(
+                    "3. Type the number of questions you would like to answer, must be greater than 0");
                 step4.setText("4. Start the Quiz");
                 BorderPane br = new BorderPane();
                 VBox vb = new VBox();
@@ -323,17 +356,20 @@ public class Main extends Application {
             // for closing
             primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
-    public void handle(WindowEvent we) {
-        ending_helper();
-    }});startButton.setOnAction(e->{this.topic=grabTopic.getValue();displayQuiz(this.topic);
+                public void handle(WindowEvent we) {
+                    ending_helper();
+                }
+            });
+            startButton.setOnAction(e -> {
+                this.topic = grabTopic.getValue();
+                displayQuiz(this.topic);
 
-    primaryStage.show();
+                primaryStage.show();
 
-    });
+            });
 
 
-    }catch(Exception e)
-    {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -495,11 +531,11 @@ public class Main extends Application {
     }
 
     private void displayQuiz(String topic) {
-
         questions = questionDB.getQuestions(topic);
-            this.currQuestion = questions.get(numInQList);
-            this.currQuestionNum++;
-            displayQuestion();
+        this.currQuestion = questions.get(numInQList);
+        this.numInQList++;
+        this.currQuestionNum++;
+        displayQuestion();
     }
 
     /**
@@ -549,17 +585,18 @@ public class Main extends Application {
 
         Button submit = new Button();
         submit.setText("Submit"); // IF SUBMIT THEN displaySubmit()
-        box.getChildren().add(submit);     
+        box.getChildren().add(submit);
 
         // Submit -> check answer
         submit.setOnAction(e -> {
             displaySubmit(((Labeled) group2.getSelectedToggle()).getText());
         });
-        
+
         root.setBottom(box);
 
         Scene scene = new Scene(root, 400, 400);
         s.setScene(scene);
+        this.tempQuestionStage = s;
         s.show();
 
     }
@@ -589,21 +626,24 @@ public class Main extends Application {
             text1.setFill(Color.GREEN);
 
             textFlow.getChildren().addAll(text1);
-            
-            
+
+
             Button nextQuestion = new Button("Next Question");
             textFlow.getChildren().add(nextQuestion);
             nextQuestion.setOnAction(e -> {
+                this.tempResultStage.close();
+                this.tempQuestionStage.close();
                 displayQuiz(currQuestion.getTopic());
             });
-            
 
             Group group = new Group(textFlow);
             Scene scene = new Scene(group, 350, 150, Color.WHITE);
             s.setTitle("Your Answer is");
             s.setScene(scene);
+            this.tempResultStage = s;
             s.show();
             if (currQuestionNum == totalNumQuestions) {
+                this.tempQuestionStage.close();
                 displayResults();
             }
         } else {
@@ -620,20 +660,27 @@ public class Main extends Application {
             text1.setFill(Color.RED);
 
             textFlow.getChildren().addAll(text1);
-            
+
             Button nextQuestion = new Button("Next Question");
             textFlow.getChildren().add(nextQuestion);
             nextQuestion.setOnAction(e -> {
+                this.tempQuestionStage.close();
+                this.tempResultStage.close();
                 displayQuiz(currQuestion.getTopic());
             });
+
+
 
             // shows what the user chose
             Group group = new Group(textFlow);
             Scene scene = new Scene(group, 350, 150, Color.WHITE);
             s.setTitle("Your Answer is");
             s.setScene(scene);
+            this.tempResultStage = s;
             s.show();
             if (currQuestionNum == totalNumQuestions) {
+                this.tempQuestionStage.close();
+                this.tempResultStage.close();
                 displayResults();
             }
         }
@@ -676,19 +723,23 @@ public class Main extends Application {
 
         Button backBtn = new Button();
         backBtn.setText("Back to Main Page");
-        backBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                primaryStage.setScene(mainScene);
-                primaryStage.setFullScreen(true);
-                primaryStage.show();
-            }
+        backBtn.setOnAction(e -> {
+            this.currQuestion = null;
+            this.currQuestionNum = 0;
+            this.totalNumQuestions = 0;
+            this.numIncorrect = 0;
+            this.numInQList = 0;
+            this.tempResultStage.close();
+            this.tempEndStage.close();
+            primaryStage.setScene(mainScene);
+            primaryStage.setFullScreen(true);
+            primaryStage.show();
         });
 
         centerVB.getChildren().add(backBtn);
 
         root.setCenter(centerVB);
-
+        this.tempEndStage = s;
         s.show();
     }
 

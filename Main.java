@@ -279,12 +279,13 @@ public class Main extends Application {
             centerVB.setPadding(new Insets(10, 50, 50, 50));
             centerVB.setSpacing(10);
 
-            Label centerLabel = new Label("Press Start to begin the quiz");
+            Label centerLabel = new Label("Click start to begin");
             centerLabel.setFont(Font.font("Amble CN", FontWeight.BOLD, 16));
 
             Button startButton = new Button();
+            Button helpButton = new Button("Instructions");
             startButton.setText("Start the quiz");
-            centerVB.getChildren().addAll(centerLabel, startButton);
+            centerVB.getChildren().addAll(centerLabel, startButton, helpButton);
 
             root.setCenter(centerVB);
 
@@ -292,6 +293,27 @@ public class Main extends Application {
             startButton.setOnAction(e -> {
                 this.topic = grabTopic.getValue();
                 displayQuiz(this.topic);
+            });
+            
+            helpButton.setOnAction(e -> {
+                Stage stage = new Stage();
+                
+                stage.setTitle("Instructions");
+                Text step1 = new Text();
+                Text step2 = new Text();
+                Text step3 = new Text();
+                Text step4 = new Text();
+                step1.setText("1. Add Question or load from a json file");
+                step2.setText("2. Update Topics list and choose a topic");
+                step3.setText("3. Type the number of questions you would like to answer, must be greater than 0");
+                step4.setText("4. Start the Quiz");
+                BorderPane br = new BorderPane();
+                VBox vb = new VBox();
+                vb.getChildren().addAll(step1, step2, step3, step4);
+                br.setCenter(vb);
+                Scene secondScene = new Scene(br);
+                stage.setScene(secondScene);
+                stage.show();
             });
 
             primaryStage.show();
@@ -412,7 +434,7 @@ public class Main extends Application {
                     new Question(newMetadata, newQuestion, newTopic, newImage, newChoices, answer);
 
                 if (isdisabled == true) {
-                    questionDB.addQuestion(newTopic, question);
+                    questionDB.addQuestion(question);
                 }
             }
         });

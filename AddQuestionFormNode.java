@@ -100,7 +100,7 @@ public class AddQuestionFormNode {
     	int i;
     	for(i = 0;i<5;i++) {//gets all of the choice text
     	HBox hb = (HBox) form.getChildren().get((i*2)+4);   	
-    	Choice choice = new Choice(this.getChoiceGroups().get(i),hb.getChildren().get(1).toString());
+    	Choice choice = new Choice(this.getChoiceGroups().get(i),((TextField)hb.getChildren().get(1)).getText());
     	choiceTexts.add(choice);//adds choice to the list
     	}
         return choiceTexts;

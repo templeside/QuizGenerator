@@ -282,6 +282,10 @@ public class Main extends Application {
                     alert.show();
                 }
             });
+            
+            //adding available questions uploaded on the main screen
+            Label DisplayTotalQuestion = new Label("Total Questions: " + totalNumQuestions);
+            rightVB.getChildren().add(DisplayTotalQuestion);
 
             HBox hb = new HBox();
             hb.getChildren().addAll(numQLabel, text, NumQuestionbutton);
@@ -301,11 +305,14 @@ public class Main extends Application {
 
                 } else {
                     rightVB.getChildren().clear();
-                    rightVB.getChildren().addAll(rightVBLabel, hb, topicLabel, grabTopic,
+                    // update DisplayTotalQuestion before displaying updated Main screen
+                    totalNumQuestions = questionDB.getNumQuestions();
+                    DisplayTotalQuestion.setText("Total Questions: " + totalNumQuestions);
+                    
+                    rightVB.getChildren().addAll(rightVBLabel,DisplayTotalQuestion, hb, topicLabel, grabTopic,
                         updateButton);
                 }
             });
-
             root.setRight(rightVB);
 
             // Center
